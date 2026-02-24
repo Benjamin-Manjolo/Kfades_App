@@ -1,12 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Typography,
-  Grid,
-  Button,
-  Box,
-  Paper,
-} from '@mui/material';
 import { format, addDays, isToday, isTomorrow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { TimeSlot } from '../types';
@@ -62,80 +54,85 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">
         Select Date & Time
-      </Typography>
-
-      <Typography variant="h6" gutterBottom align="center" color="text.secondary">
+      </h1>
+      <p className="text-gray-600 text-center mb-8">
         Choose your preferred date and time slot
-      </Typography>
+      </p>
 
       {/* Date Selection */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" gutterBottom>
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
           Select Date
-        </Typography>
-        <Grid container spacing={2}>
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
           {dates.map((date) => (
-            <Grid item xs={6} sm={3} md={2} key={date.toISOString()}>
-              <Button
-                variant={selectedDate?.toDateString() === date.toDateString() ? 'contained' : 'outlined'}
-                fullWidth
-                onClick={() => handleDateSelect(date)}
-                sx={{ py: 2, display: 'flex', flexDirection: 'column' }}
-              >
-                <Typography variant="body2">{getDateLabel(date)}</Typography>
-                <Typography variant="caption">{format(date, 'd')}</Typography>
-              </Button>
-            </Grid>
+            <button
+              key={date.toISOString()}
+              onClick={() => handleDateSelect(date)}
+              className={`
+                py-3 px-2 rounded-lg border-2 transition-colors duration-200 flex flex-col items-center
+                ${selectedDate?.toDateString() === date.toDateString()
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'
+                }
+              `}
+            >
+              <span className="text-sm">{getDateLabel(date)}</span>
+              <span className="text-xs opacity-75">{format(date, 'd')}</span>
+            </button>
           ))}
-        </Grid>
-      </Box>
+        </div>
+      </div>
 
       {/* Time Selection */}
       {selectedDate && (
-        <Box>
-          <Typography variant="h6" gutterBottom>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
-          </Typography>
-          <Grid container spacing={1}>
+          </h2>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
             {timeSlots.map((slot) => (
-              <Grid item xs={4} sm={3} md={2} key={slot.time}>
-                <Button
-                  variant={selectedTime === slot.time ? 'contained' : 'outlined'}
-                  fullWidth
-                  disabled={!slot.available}
-                  onClick={() => handleTimeSelect(slot.time)}
-                  sx={{ py: 1 }}
-                >
-                  {slot.time}
-                </Button>
-              </Grid>
+              <button
+                key={slot.time}
+                onClick={() => handleTimeSelect(slot.time)}
+                disabled={!slot.available}
+                className={`
+                  py-2 px-1 rounded-md border transition-colors duration-200 text-sm
+                  ${!slot.available
+                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                    : selectedTime === slot.time
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-blue-400'
+                  }
+                `}
+              >
+                {slot.time}
+              </button>
             ))}
-          </Grid>
-        </Box>
+          </div>
+        </div>
       )}
 
       {/* Continue Button */}
       {selectedDate && selectedTime && (
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
-          <Paper elevation={2} sx={{ p: 3, maxWidth: 400, mx: 'auto' }}>
-            <Typography variant="h6" gutterBottom>
+        <div className="mt-8 text-center">
+          <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto mb-4">
+            <p className="text-lg text-gray-700">
               Selected: {format(selectedDate, 'EEEE, MMMM d')} at {selectedTime}
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
+            </p>
+            <button
               onClick={handleContinue}
-              sx={{ mt: 2 }}
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
             >
               Continue to Booking
-            </Button>
-          </Paper>
-        </Box>
+            </button>
+          </div>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

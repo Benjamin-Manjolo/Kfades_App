@@ -1,13 +1,4 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  Box,
-  Alert,
-} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin: React.FC = () => {
@@ -29,51 +20,60 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ display: 'flex', alignItems: 'center', minHeight: '100vh' }}>
-      <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Admin Login
-        </Typography>
+        </h1>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
-          </Alert>
+          </div>
         )}
 
-        <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="PIN"
-            type="password"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          />
-          <Button
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter phone number"
+            />
+          </div>
+          <div>
+            <label htmlFor="pin" className="block text-sm font-medium text-gray-700 mb-1">
+              PIN
+            </label>
+            <input
+              id="pin"
+              type="password"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter PIN"
+            />
+          </div>
+          <button
             type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
           >
             Login
-          </Button>
-        </Box>
+          </button>
+        </form>
 
-        <Typography variant="body2" color="text.secondary" align="center">
+        <p className="text-sm text-gray-500 text-center mt-4">
           Demo: Use phone 1234567890 and PIN 1234
-        </Typography>
-      </Paper>
-    </Container>
+        </p>
+      </div>
+    </div>
   );
 };
 

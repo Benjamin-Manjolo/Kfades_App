@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container, Typography, Button, Box, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Welcome: React.FC = () => {
@@ -10,26 +9,22 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ display: 'flex', alignItems: 'center', minHeight: '100vh' }}>
-      <Paper elevation={3} sx={{ p: 4, width: '100%', textAlign: 'center' }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
           Welcome!
-        </Typography>
-        <Typography variant="h6" color="text.secondary" gutterBottom>
+        </h1>
+        <p className="text-lg text-red-400 mb-6">
           Just enter your name & phone to book
-        </Typography>
-        <Box sx={{ mt: 4 }}>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleGetStarted}
-            sx={{ px: 4, py: 1.5 }}
-          >
-            Get Started
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
+        </p>
+        <button
+          onClick={handleGetStarted}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200"
+        >
+          Get Started
+        </button>
+      </div>
+    </div>
   );
 };
 

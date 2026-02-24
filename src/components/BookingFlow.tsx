@@ -1,22 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  Button,
-  Box,
-  TextField,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
 
@@ -87,146 +69,176 @@ const BookingFlow: React.FC = () => {
     switch (step) {
       case 0:
         return (
-          <Box>
-            <Typography variant="h6" gutterBottom>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Confirm Your Service
-            </Typography>
+            </h2>
             {selectedService && (
-              <Card>
-                <CardContent>
-                  <Typography variant="h5">{selectedService.name}</Typography>
-                  <Typography variant="body1">{selectedService.description}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    ${selectedService.price} • {selectedService.duration} minutes
-                  </Typography>
-                </CardContent>
-              </Card>
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h3 className="text-xl font-bold text-gray-800">{selectedService.name}</h3>
+                <p className="text-gray-600 mt-1">{selectedService.description}</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  ${selectedService.price} • {selectedService.duration} minutes
+                </p>
+              </div>
             )}
-          </Box>
+          </div>
         );
       case 1:
         return (
-          <Box>
-            <Typography variant="h6" gutterBottom>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Confirm Date & Time
-            </Typography>
+            </h2>
             {bookingData && (
-              <Paper sx={{ p: 2 }}>
-                <Typography>
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <p className="text-gray-700">
                   Date: {new Date(bookingData.date).toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                   })}
-                </Typography>
-                <Typography>Time: {bookingData.time}</Typography>
-              </Paper>
+                </p>
+                <p className="text-gray-700 mt-1">Time: {bookingData.time}</p>
+              </div>
             )}
-          </Box>
+          </div>
         );
       case 2:
         return (
-          <Box>
-            <Typography variant="h6" gutterBottom>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Your Information
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Full Name"
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name *
+                </label>
+                <input
+                  id="name"
+                  type="text"
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                   required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your full name"
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Phone Number"
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number *
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                   required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter phone number"
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Address / Location"
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                  Address / Location *
+                </label>
+                <textarea
+                  id="address"
                   value={customerInfo.address}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                   required
-                  multiline
                   rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your address"
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Special Requests (optional)"
+              </div>
+              <div className="md:col-span-2">
+                <label htmlFor="specialRequests" className="block text-sm font-medium text-gray-700 mb-1">
+                  Special Requests (optional)
+                </label>
+                <textarea
+                  id="specialRequests"
                   value={customerInfo.specialRequests}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, specialRequests: e.target.value })}
-                  multiline
                   rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Hair type, kids coming, allergies, preferred blade, etc."
                 />
-              </Grid>
-            </Grid>
-          </Box>
+              </div>
+            </div>
+          </div>
         );
       case 3:
         return (
-          <Box>
-            <Typography variant="h6" gutterBottom>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Summary & Payment
-            </Typography>
-            <Paper sx={{ p: 3, mb: 3 }}>
-              <Typography variant="h6" gutterBottom>
+            </h2>
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 Booking Details
-              </Typography>
-              <Typography>Service: {selectedService?.name}</Typography>
-              <Typography>
+              </h3>
+              <p className="text-gray-700">Service: {selectedService?.name}</p>
+              <p className="text-gray-700">
                 Date: {bookingData && new Date(bookingData.date).toLocaleDateString()}
-              </Typography>
-              <Typography>Time: {bookingData?.time}</Typography>
-              <Typography>Name: {customerInfo.name}</Typography>
-              <Typography>Phone: {customerInfo.phone}</Typography>
-              <Typography>Address: {customerInfo.address}</Typography>
+              </p>
+              <p className="text-gray-700">Time: {bookingData?.time}</p>
+              <p className="text-gray-700">Name: {customerInfo.name}</p>
+              <p className="text-gray-700">Phone: {customerInfo.phone}</p>
+              <p className="text-gray-700">Address: {customerInfo.address}</p>
               {customerInfo.specialRequests && (
-                <Typography>Special Requests: {customerInfo.specialRequests}</Typography>
+                <p className="text-gray-700">Special Requests: {customerInfo.specialRequests}</p>
               )}
-              <Typography variant="h6" sx={{ mt: 2 }}>
+              <p className="text-xl font-bold text-gray-800 mt-4">
                 Total: ${selectedService?.price}
-              </Typography>
-            </Paper>
+              </p>
+            </div>
 
-            <Typography variant="h6" gutterBottom>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
               Payment Option
-            </Typography>
-            <FormControl component="fieldset">
-              <RadioGroup
-                value={paymentOption}
-                onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-              >
-                <FormControlLabel
+            </h3>
+            <div className="space-y-2">
+              <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="payment"
                   value="deposit"
-                  control={<Radio />}
-                  label={`Deposit ($${Math.round(selectedService!.price * 0.3)}) - Required to secure slot`}
+                  checked={paymentOption === 'deposit'}
+                  onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
+                  className="w-4 h-4 text-blue-600"
                 />
-                <FormControlLabel
+                <span className="text-gray-700">
+                  Deposit (${Math.round(selectedService!.price * 0.3)}) - Required to secure slot
+                </span>
+              </label>
+              <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="payment"
                   value="full"
-                  control={<Radio />}
-                  label={`Pay full amount now ($${selectedService!.price})`}
+                  checked={paymentOption === 'full'}
+                  onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
+                  className="w-4 h-4 text-blue-600"
                 />
-                <FormControlLabel
+                <span className="text-gray-700">
+                  Pay full amount now (${selectedService!.price})
+                </span>
+              </label>
+              <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="payment"
                   value="cash"
-                  control={<Radio />}
-                  label="Cash on arrival"
+                  checked={paymentOption === 'cash'}
+                  onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
+                  className="w-4 h-4 text-blue-600"
                 />
-              </RadioGroup>
-            </FormControl>
-          </Box>
+                <span className="text-gray-700">Cash on arrival</span>
+              </label>
+            </div>
+          </div>
         );
       default:
         return null;
@@ -234,38 +246,68 @@ const BookingFlow: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom align="center">
+    <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Book Your Appointment
-      </Typography>
+      </h1>
 
-      <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
+      {/* Stepper */}
+      <div className="flex items-center justify-between mb-8 px-4">
+        {steps.map((label, index) => (
+          <React.Fragment key={label}>
+            <div className="flex flex-col items-center">
+              <div
+                className={`
+                  w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                  ${index < activeStep
+                    ? 'bg-green-600 text-white'
+                    : index === activeStep
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-600'
+                  }
+                `}
+              >
+                {index < activeStep ? '✓' : index + 1}
+              </div>
+              <span className={`text-xs mt-1 ${index === activeStep ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>
+                {label}
+              </span>
+            </div>
+            {index < steps.length - 1 && (
+              <div
+                className={`flex-grow h-1 mx-2 ${index < activeStep ? 'bg-green-600' : 'bg-gray-200'}`}
+              />
+            )}
+          </React.Fragment>
         ))}
-      </Stepper>
+      </div>
 
-      <Box sx={{ mt: 2, mb: 4 }}>
+      <div className="bg-gray-50 rounded-lg p-6 mb-6">
         {renderStepContent(activeStep)}
-      </Box>
+      </div>
 
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
+      <div className="flex justify-between pt-4">
+        <button
           onClick={handleBack}
-          sx={{ mr: 1 }}
+          disabled={activeStep === 0}
+          className={`
+            px-6 py-2 rounded-md font-medium transition-colors duration-200
+            ${activeStep === 0
+              ? 'text-gray-400 cursor-not-allowed'
+              : 'text-gray-700 hover:bg-gray-100'
+            }
+          `}
         >
           Back
-        </Button>
-        <Box sx={{ flex: '1 1 auto' }} />
-        <Button onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}>
+        </button>
+        <button
+          onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+        >
           {activeStep === steps.length - 1 ? 'Confirm Booking' : 'Next'}
-        </Button>
-      </Box>
-    </Container>
+        </button>
+      </div>
+    </div>
   );
 };
 

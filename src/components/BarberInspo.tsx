@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container, Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
 
 const BarberInspo: React.FC = () => {
   const images = [
@@ -30,30 +29,27 @@ const BarberInspo: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Barber Inspiration
-      </Typography>
-      <Grid container spacing={2}>
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {images.map((image, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="200"
-                image={`/Barber Inspo/${image}`}
-                alt={`Haircut ${index + 1}`}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  Haircut Inspiration {index + 1}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <img
+              src={`/Barber Inspo/${image}`}
+              alt={`Haircut ${index + 1}`}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-3">
+              <p className="text-gray-600 text-sm">
+                Haircut Inspiration {index + 1}
+              </p>
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 };
 
