@@ -4,7 +4,7 @@ export interface Service {
   price: number;
   duration: number; // in minutes
   description: string;
-  image?: string;
+  image:any;
   popular?: boolean;
 }
 
@@ -44,4 +44,10 @@ export interface TravelZone {
 export interface AdminUser {
   phone: string;
   pin: string;
+}
+
+
+export interface Payment{
+  phone:number;
+  amount:number;
 }

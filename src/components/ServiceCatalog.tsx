@@ -27,7 +27,7 @@ const ServiceCatalog: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Our Services
+        Madongosolo athu
       </h1>
 
       <div className="mb-6 flex justify-center">
@@ -53,14 +53,16 @@ const ServiceCatalog: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {sortedServices.map((service) => (
-          <div key={service.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-            {service.image && (
-              <img
-                src={service.image}
-                alt={service.name}
-                className="w-full h-48 object-cover"
-              />
-            )}
+          <div key={service.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="relative h-48">
+              {service.image && (
+                <img
+                  src={service.image}
+                  alt={service.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
             <div className="p-4 flex-grow flex flex-col">
               <div className="flex justify-between items-start mb-2">
                 <h2 className="text-lg font-semibold text-gray-800">
