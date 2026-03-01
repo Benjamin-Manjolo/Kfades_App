@@ -1,0 +1,36 @@
+=== BOOKINGS RECORD ===
+
+
+=== NEW BOOKING ===
+Time: 2026-03-01T20:52:04.890Z
+--------------------
+Booking ID: 1772398324796
+Service: Classic Haircut
+Price: $25
+Date: 2026-03-04
+Time: 10:30
+Customer Name: kuruptopia
+Phone: 990381394
+Address: kkhama
+Special Requests: mbali
+Payment Option: cash
+Status: pending
+====================
+
+
+=== NEW BOOKING ===
+Time: 2026-03-01T20:53:54.473Z
+--------------------
+Booking ID: 1772398434462
+Service: Haircut & Beard
+Price: $35
+Date: 2026-03-05
+Time: 14:00
+Customer Name: webspotify
+Phone: 990381394
+Address: mmm
+Special Requests: None
+Payment Option: cash
+Status: pending
+====================
+

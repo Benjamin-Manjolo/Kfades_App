@@ -38,7 +38,7 @@ const BookingFlow: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     // Mock booking creation
     const newBooking: Booking = {
       id: Date.now().toString(),
@@ -53,6 +53,37 @@ const BookingFlow: React.FC = () => {
       status: 'pending',
       totalPrice: selectedService!.price,
     };
+
+    // Send booking to backend server
+    try {
+      const response = await fetch('http://localhost:3001/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: newBooking.id,
+          serviceName: selectedService!.name,
+          date: newBooking.date,
+          time: newBooking.time,
+          customerName: newBooking.customerName,
+          phone: newBooking.phone,
+          address: newBooking.address,
+          specialRequests: newBooking.specialRequests,
+          paymentOption: newBooking.paymentOption,
+          status: newBooking.status,
+          totalPrice: newBooking.totalPrice,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Booking saved to server');
+      } else {
+        console.error('Failed to save booking to server');
+      }
+    } catch (error) {
+      console.error('Error connecting to server:', error);
+    }
 
     // In real app, this would be an API call
     console.log('New booking:', newBooking);
