@@ -12,6 +12,12 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+//welcoms kurupt the barber
+
+app.get('/',(re,res)=>{
+  res.send('Welcome to Kfades Booking API!')
+})
+
 // File to store bookings
 const BOOKINGS_FILE = path.join(__dirname, 'bookings.txt');
 
