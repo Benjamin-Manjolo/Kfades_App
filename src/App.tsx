@@ -6,6 +6,7 @@ import ServiceCatalog from './components/ServiceCatalog';
 import Calendar from './components/Calendar';
 import BookingFlow from './components/BookingFlow';
 import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
 import BarberInspo from './components/BarberInspo';
 import PaymentPage from './components/Paymentpage';
 
@@ -17,10 +18,9 @@ function App() {
         <Route path="/services" element={<ServiceCatalog />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/booking" element={<BookingFlow />} />
-        <Route path="/admin" element={<AdminLogin />}
-         />
-        <Route path="/payment" element={<PaymentPage/>}
-         />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/payment" element={<PaymentPage />} />
         <Route path="/barber-inspo" element={<BarberInspo />} />
       </Routes>
     </Router>

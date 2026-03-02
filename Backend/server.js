@@ -1,76 +1,118 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const supabase = require('./supabase');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-
-
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-//welcoms kurupt the barber
-
-app.get('/',(re,res)=>{
+// Welcome kurupt the barber
+app.get('/', (re, res) => {
   res.send('Welcome to Kfades Booking API!')
-})
+});
 
-// File to store bookings
-const BOOKINGS_FILE = path.join(__dirname, 'bookings.txt');
-
-// Ensure bookings file exists
-if (!fs.existsSync(BOOKINGS_FILE)) {
-  fs.writeFileSync(BOOKINGS_FILE, '=== BOOKINGS RECORD ===\n\n');
-}
-
-// POST endpoint to save booking
-app.post('/api/bookings', (req, res) => {
+// POST endpoint to save booking to Supabase
+app.post('/api/bookings', async (req, res) => {
   try {
     const booking = req.body;
     const timestamp = new Date().toISOString();
-    
-    // Format booking data
-    const bookingRecord = `
-=== NEW BOOKING ===
-Time: ${timestamp}
---------------------
-Booking ID: ${booking.id}
-Service: ${booking.serviceName || 'N/A'}
-Price: $${booking.totalPrice || '0'}
-Date: ${booking.date}
-Time: ${booking.time}
-Customer Name: ${booking.customerName}
-Phone: ${booking.phone}
-Address: ${booking.address}
-Special Requests: ${booking.specialRequests || 'None'}
-Payment Option: ${booking.paymentOption}
-Status: ${booking.status}
-====================
 
-`;
+    // Insert booking into Supabase
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert([
+        {
+          booking_id: booking.id,
+          service_name: booking.serviceName,
+          price: booking.totalPrice,
+          date: booking.date,
+          time: booking.time,
+          customer_name: booking.customerName,
+          phone: booking.phone,
+          address: booking.address,
+          special_requests: booking.specialRequests || null,
+          payment_option: booking.paymentOption,
+          status: booking.status,
+          created_at: timestamp,
+        },
+      ]);
 
-    // Append to file
-    fs.appendFileSync(BOOKINGS_FILE, bookingRecord);
-    
-    console.log('Booking saved:', booking.id);
-    res.status(200).json({ success: true, message: 'Booking saved successfully' });
+    if (error) {
+      console.error('Supabase error:', error);
+      return res.status(500).json({ success: false, message: 'Error saving booking to database' });
+    }
+
+    console.log('Booking saved to Supabase:', booking.id);
+    res.status(200).json({ success: true, message: 'Booking saved successfully', data });
   } catch (error) {
     console.error('Error saving booking:', error);
     res.status(500).json({ success: false, message: 'Error saving booking' });
   }
 });
 
-// GET endpoint to retrieve all bookings
-app.get('/api/bookings', (req, res) => {
+// GET endpoint to retrieve all bookings from Supabase
+app.get('/api/bookings', async (req, res) => {
   try {
-    const bookings = fs.readFileSync(BOOKINGS_FILE, 'utf8');
-    res.status(200).json({ success: true, data: bookings });
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return res.status(500).json({ success: false, message: 'Error reading bookings' });
+    }
+
+    // Format the bookings for display
+    const formattedBookings = data.map(booking => `
+=== NEW BOOKING ===
+Time: ${booking.created_at}
+--------------------
+Booking ID: ${booking.booking_id}
+Service: ${booking.service_name}
+Price: $${booking.price}
+Date: ${booking.date}
+Time: ${booking.time}
+Customer Name: ${booking.customer_name}
+Phone: ${booking.phone}
+Address: ${booking.address}
+Special Requests: ${booking.special_requests || 'None'}
+Payment Option: ${booking.payment_option}
+Status: ${booking.status}
+====================
+`).join('\n');
+
+    res.status(200).json({ success: true, data: formattedBookings, rawData: data });
   } catch (error) {
     console.error('Error reading bookings:', error);
     res.status(500).json({ success: false, message: 'Error reading bookings' });
+  }
+});
+
+// PUT endpoint to update booking status
+app.put('/api/bookings/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status })
+      .eq('booking_id', id);
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return res.status(500).json({ success: false, message: 'Error updating booking' });
+    }
+
+    console.log('Booking updated:', id, 'Status:', status);
+    res.status(200).json({ success: true, message: 'Booking updated successfully', data });
+  } catch (error) {
+    console.error('Error updating booking:', error);
+    res.status(500).json({ success: false, message: 'Error updating booking' });
   }
 });
 

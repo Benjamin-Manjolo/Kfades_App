@@ -56,7 +56,7 @@ const BookingFlow: React.FC = () => {
 
     // Send booking to backend server
     try {
-      const response = await fetch('https://kfades.onrender.com/api/bookings', {
+      const response = await fetch('http://localhost:3001/api/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
