@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { format, addDays, isToday, isTomorrow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { TimeSlot } from '../types';
+import NavBar from './NavBar';
 
 const Calendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -55,6 +56,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+       <NavBar/>
       <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">
         Select Date & Time
       </h1>

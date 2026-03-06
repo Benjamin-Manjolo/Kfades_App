@@ -7,6 +7,11 @@ export interface Service {
   image:any;
   popular?: boolean;
 }
+export interface NavBarItem {
+  label: string;
+  explore: string;
+}
+
 
 export interface Booking {
   id: string;

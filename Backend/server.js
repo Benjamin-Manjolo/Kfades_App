@@ -96,7 +96,7 @@ Status: ${booking.status}
 app.put('/api/bookings/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status } = req.body;s
 
     const { data, error } = await supabase
       .from('bookings')

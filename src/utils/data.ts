@@ -1,4 +1,4 @@
-import { Service } from '../types';
+import { Service, NavBarItem } from '../types';
 
 
 const images = [
@@ -80,3 +80,14 @@ export const mockServices: Service[] = [
     description: 'Traditional straight razor shave with hot towel',
   },
 ];
+
+export const NavbarItems: NavBarItem[] = [
+  {
+    label: 'Notifications',
+    explore: '/',
+  },
+  {
+    label: 'explore',
+    explore: '/',
+  },
+   ]

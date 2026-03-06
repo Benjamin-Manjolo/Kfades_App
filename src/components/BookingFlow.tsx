@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
+import NavBar from './NavBar';
 
 const steps = ['Service', 'Date & Time', 'Your Info', 'Summary & Confirm'];
 
@@ -278,6 +279,7 @@ const BookingFlow: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl">
+       <NavBar/>
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Book Your Appointment
       </h1>
