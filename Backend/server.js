@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const supabase = require('./supabase');
+const paychanguRouter = require('./Paychangu-with-axios/payment');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,9 +9,10 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/paychangu', paychanguRouter);
 
 // Welcome kurupt the barber
-app.get('/', (re, res) => {
+app.get('/', (req, res) => {
   res.send('Welcome to Kfades Booking API!')
 });
 
@@ -96,7 +98,7 @@ Status: ${booking.status}
 app.put('/api/bookings/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;s
+    const { status } = req.body;
 
     const { data, error } = await supabase
       .from('bookings')
