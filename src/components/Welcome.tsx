@@ -30,24 +30,24 @@ const Welcome: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-full p-6 pb-12 md:pb-16">
         <div className="max-w-lg">
           {/* KFADES - Large Bold Uppercase */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white uppercase tracking-wider mb-2">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl text-white uppercase ">
             KFADES
           </h1>
           
           {/* Upscale your looks - Medium White Text */}
-          <p className="text-lg md:text-xl text-white mb-1">
+          <p className="text-lg md:text-xl text-white">
             Upscale your looks
           </p>
           
           {/* come get a cut - Small Italic Light White */}
-          <p className="text-sm text-gray-300 italic mb-6">
+          <p className="text-sm text-gray-300 mb-3">
             come get a cut
           </p>
 
           {/* Get Started Button */}
           <button
             onClick={handleGetStarted}
-            className="w-full md:w-auto bg-cyan-400 hover:bg-cyan-500 text-white font-semibold py-3 px-8 rounded-md transition-colors duration-200"
+            className="text-white text-center rounded-xl shadow-md bg-orange-500 p-3"
           >
             Get Started
           </button>

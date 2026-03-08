@@ -1,4 +1,5 @@
 import React from 'react';
+import NavBar from './NavBar';
 
 const BarberInspo: React.FC = () => {
   const images = [
@@ -29,17 +30,19 @@ const BarberInspo: React.FC = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Barber Inspiration
+    <div className="container mx-auto px-4 py-8 "
+    style={{ backgroundImage: "url('/bgimage.png')" }}>
+       <NavBar/>
+      <h1 className="text-md font-semibold shadow-md bg-white/70 p-6 rounded-md text-center text-orange-500 mb-2">
+        Haircut Inspirations
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-2 p-2">
         {images.map((image, index) => (
           <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
             <img
-              src={`/Barber Inspo/${image}`}
+              src={`/Barber-Inspo/${image}`}
               alt={`Haircut ${index + 1}`}
-              className="w-full h-48 object-cover"
+              className="w-full h-58 object-cover"
             />
             <div className="p-3">
               <p className="text-gray-600 text-sm">

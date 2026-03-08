@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
-import { mockServices, NavbarItems } from '../utils/data';
+import { mockServices } from '../utils/data';
 import { Service } from '../types';
 
 const ServiceCatalog: React.FC = () => {
@@ -20,54 +20,75 @@ const ServiceCatalog: React.FC = () => {
   });
 
   const handleBookNow = (service: Service) => {
-    // Store selected service in localStorage or context
     localStorage.setItem('selectedService', JSON.stringify(service));
     navigate('/calendar');
   };
 
   return (
-    <>
-   
-    <div className="container bg-[#333333] mx-auto px-4 py-8">
-      <NavBar/>
-      
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat px-4 py-8"
+     
+    >
+      <NavBar />
 
-      <div className="mb-6 flex justify-center">
-       
+      {/* Sort Controls */}
+      <div className="flex gap-2 mb-6 pt-4 mt-10">
+        {(['popular', 'price', 'duration'] as const).map((option) => (
+          <button
+            key={option}
+            onClick={() => setSortBy(option)}
+            className={`px-4 py-1 rounded-full text-sm font-medium capitalize transition-colors duration-200 ${
+              sortBy === option
+                ? 'bg-orange-400 text-black/90'
+                : 'bg-gray-800 text-white hover:bg-gray-700'
+            }`}
+          >
+            {option}
+          </button>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {/* Service Cards - Masonry Style */}
+      <div className="columns-1 sm:columns-2 md:columns-3 gap-3 mt-10">
         {sortedServices.map((service) => (
-          <div key={service.id} className="bg-[#333333] rounded-lg shadow-md overflow-hidden">
-            <div className="relative w-full h-64 overflow-hidden">
-              {service.image && (
+          <div
+            key={service.id}
+            className="break-inside-avoid mb-3 bg-black/90 rounded-xl overflow-hidden shadow-md"
+          >
+            {/* Image */}
+            {service.image && (
+              <div className="relative w-full h-56 overflow-hidden">
                 <img
                   src={service.image}
                   alt={service.name}
                   className="w-full h-full object-cover"
                 />
-              )}
-            </div>
-            <div className="p-4 flex-grow flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-lg font-semibold text-white">
-                  {service.name}
-                </h2>
+             
+                {/* Popular badge */}
                 {service.popular && (
-                  <span className="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  <span className="absolute top-3 right-3 bg-orange-400 text-black/90 text-xs font-bold px-2 py-1 rounded-full">
                     Popular
                   </span>
                 )}
               </div>
-              <p className="text-white text-sm mb-3">
+            )}
+
+            {/* Content */}
+            <div className="p-4">
+              <div className="flex justify-between items-start mb-1">
+                <h2 className="text-lg font-semibold text-white">
+                  {service.name}
+                </h2>
+              </div>
+              <p className="text-gray-400 text-sm mb-2">
                 {service.description}
               </p>
-              <p className="font-bold text-white mb-3">
-                ${service.price} • {service.duration} min
+              <p className="font-bold text-orange-400 mb-3">
+                MWK {service.price} • {service.duration} min
               </p>
               <button
                 onClick={() => handleBookNow(service)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 mt-auto"
+                className="w-full bg-orange-400 hover:bg-orange-500 text-black/90 font-semibold py-2 px-4 rounded-md transition-colors duration-200"
               >
                 Book Now
               </button>
@@ -76,9 +97,7 @@ const ServiceCatalog: React.FC = () => {
         ))}
       </div>
     </div>
-    </>
   );
-  
 };
 
 export default ServiceCatalog;

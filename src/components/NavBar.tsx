@@ -4,7 +4,7 @@ import { NavbarItems } from "../utils/data"
 const NavBar: React.FC = (any)=>{
     return (
        <>
-        <nav className="bg-gray-300 rounded-lg shadow-md mb-10">
+        <nav className="bg-white rounded-lg shadow-xl fixed top-1 left-4 right-4 z-50 mb-10">
          <div className="max-w-7xl mx-auto px-4">
            <div className="flex justify-between h-12 items-center">
        

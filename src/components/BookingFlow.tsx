@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
 import NavBar from './NavBar';
 
-const steps = ['Service', 'Date & Time', 'Your Info', 'Summary & Confirm'];
+const steps = ['Service', 'Time', 'Info', 'Confirm'];
 
 const BookingFlow: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -101,8 +101,8 @@ const BookingFlow: React.FC = () => {
     switch (step) {
       case 0:
         return (
-          <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div  >
+            <h2 className="text-xl font-semibold shadow-sm  p-6 rounded-md text-orange-500 mb-4">
               Confirm Your Service
             </h2>
             {selectedService && (
@@ -154,7 +154,7 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -168,7 +168,7 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -182,7 +182,7 @@ const BookingFlow: React.FC = () => {
                   onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                   required
                   rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter your address"
                 />
               </div>
@@ -195,7 +195,7 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.specialRequests}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, specialRequests: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Hair type, kids coming, allergies, preferred blade, etc."
                 />
               </div>
@@ -239,10 +239,13 @@ const BookingFlow: React.FC = () => {
                   value="deposit"
                   checked={paymentOption === 'deposit'}
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-red-600"
                 />
                 <span className="text-gray-700">
                   Deposit (${Math.round(selectedService!.price * 0.3)}) - Required to secure slot
+                  <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
+    soon!
+  </span>
                 </span>
               </label>
               <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
@@ -252,10 +255,13 @@ const BookingFlow: React.FC = () => {
                   value="full"
                   checked={paymentOption === 'full'}
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-orange-600"
                 />
                 <span className="text-gray-700">
-                  Pay full amount now (${selectedService!.price})
+                  Pay full amount now (${selectedService!.price}) {`  `} {
+  <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
+    soon!
+  </span>}
                 </span>
               </label>
               <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
@@ -265,9 +271,9 @@ const BookingFlow: React.FC = () => {
                   value="cash"
                   checked={paymentOption === 'cash'}
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-orange-600"
                 />
-                <span className="text-gray-700">Cash on arrival</span>
+                <span className="text-gray-700">Cash on arrival </span>
               </label>
             </div>
           </div>
@@ -278,9 +284,11 @@ const BookingFlow: React.FC = () => {
   };
 
   return (
+    <div  className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/bgimage.png')" }}>
     <div className="container mx-auto px-4 py-8 max-w-3xl">
-       <NavBar/>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+       <NavBar />
+      <h1 className="text-xl mt-10 font-bold text-orange-500 shadow-md bg-white p-6 rounded-md mb-3 text-center">
         Book Your Appointment
       </h1>
 
@@ -295,14 +303,14 @@ const BookingFlow: React.FC = () => {
                   ${index < activeStep
                     ? 'bg-green-600 text-white'
                     : index === activeStep
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-orange-600 text-white'
                       : 'bg-gray-200 text-gray-600'
                   }
                 `}
               >
                 {index < activeStep ? '✓' : index + 1}
               </div>
-              <span className={`text-xs mt-1 ${index === activeStep ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>
+              <span className={`text-xs mt-1 ${index === activeStep ? 'text-orange-600 font-medium' : 'text-gray-500'}`}>
                 {label}
               </span>
             </div>
@@ -335,11 +343,12 @@ const BookingFlow: React.FC = () => {
         </button>
         <button
           onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+          className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
         >
           {activeStep === steps.length - 1 ? 'Confirm Booking' : 'Next'}
         </button>
       </div>
+    </div>
     </div>
   );
 };
