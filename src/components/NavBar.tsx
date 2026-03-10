@@ -13,9 +13,9 @@ const NavBar: React.FC = () => {
 
           
           <div className="flex p-2 items-center">
-             <Notifications className="text-gray-700  text-2xl" />
+             <Notifications className="text-[#D0770C]  text-2xl" />
             {leftItems.map((item) => (
-              <a key={item.label} href={item.explore} className="text-gray-700 font-medium tracking-wide hover:text-blue-600 text-lg">
+              <a key={item.label} href={item.explore} className="text-gray-700 text-[#D0770C] tracking-wide hover:text-blue-600 text-lg">
                 {item.label}
               </a>
             ))}
@@ -23,10 +23,10 @@ const NavBar: React.FC = () => {
 
           {/* RIGHT item */}
           <div className="flex p-2 items-center">
-              <Explore className="text-gray-700  text-2xl" />
+              <Explore className="text-[#D0770C]  text-2xl" />
             {rightItems.map((item) => (
               
-              <a key={item.label} href={item.explore} className="text-gray-700 font-medium tracking-wide hover:text-blue-600 text-lg"
+              <a key={item.label} href={item.explore} className="text-[#D0770C] tracking-wide hover:text-blue-600 text-lg"
             >
                 {item.label}
               </a>

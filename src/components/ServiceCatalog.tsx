@@ -44,8 +44,8 @@ const ServiceCatalog: React.FC = () => {
             onClick={() => setSortBy(option)}
             className={`px-4 py-1 rounded-full text-sm font-medium capitalize transition-colors duration-200 ${
               sortBy === option
-                ? 'bg-white shadow-md text-black/90'
-                : 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-black hover:bg-white'
+                ? 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] shadow-md text-black/90'
+                : 'bg-white shadow-md text-black hover:bg-white'
             }`}
           >
             {option}

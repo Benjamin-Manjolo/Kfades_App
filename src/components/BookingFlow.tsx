@@ -292,7 +292,7 @@ const BookingFlow: React.FC = () => {
                   ${index < activeStep
                     ? 'bg-green-600 text-white'
                     : index === activeStep
-                      ? 'bg-orange-600 text-white'
+                      ? 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-white'
                       : 'bg-gray-200 text-gray-600'
                   }
                 `}
@@ -332,7 +332,7 @@ const BookingFlow: React.FC = () => {
         </button>
         <button
           onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
-          className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+          className="bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] hover:bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
         >
           {activeStep === steps.length - 1 ? 'Confirm Booking' : 'Next'}
         </button>

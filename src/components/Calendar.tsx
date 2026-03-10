@@ -61,8 +61,8 @@ const Calendar: React.FC = () => {
          
     <div className="container mx-auto px-4 py-8 max-w-4xl">
      
-      <div className='neu-inset rounded-xl px-4 py-3 bg-white/80 backdrop-blur-sm gap-3 mb-6'
-      ><h1 className="text-3xl font-bold text-gray-700 tracking-wide  mb-2 text-center">
+      <div className=' rounded-xl px-4 py-3 bg-white backdrop-blur-sm gap-3 mb-6'
+      ><h1 className="text-lg font-semibold text-gray-700 tracking-wide  mb-2 text-center">
          
         Select Date & Time
       </h1>
@@ -96,7 +96,7 @@ const Calendar: React.FC = () => {
       {/* Time Selection */}
       {selectedDate && (
         <div>
-          <h2 className="neu-inset rounded-lg backdrop-blur-sm text-md font-semibold text-gray-800 bg-white/80 text-center   p-4 mb-4">
+          <h2 className=" rounded-lg backdrop-blur-sm text-md font-semibold text-gray-800 bg-white text-center   p-4 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
