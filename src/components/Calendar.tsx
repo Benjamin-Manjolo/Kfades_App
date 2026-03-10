@@ -55,12 +55,14 @@ const Calendar: React.FC = () => {
   };
 
   return (
+    <>
     <div   className="min-h-screen mt-10 bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/bgimage.png')" }}>
+         
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-       <NavBar/>
-      <div className='bg-white rounded-lg shadow-md p-4 mb-6'
-      ><h1 className="text-3xl font-bold text-orange-500  mb-2 text-center">
+     
+      <div className='neu-inset rounded-xl px-4 py-3 bg-white/80 backdrop-blur-sm gap-3 mb-6'
+      ><h1 className="text-3xl font-bold text-gray-700 tracking-wide  mb-2 text-center">
          
         Select Date & Time
       </h1>
@@ -79,8 +81,8 @@ const Calendar: React.FC = () => {
               className={`
                 py-3 px-2 rounded-lg border-2 transition-colors duration-200 flex flex-col items-center
                 ${selectedDate?.toDateString() === date.toDateString()
-                  ? 'bg-orange-600 text-white border-orange-600'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400'
+                  ? 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-white '
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
                 }
               `}
             >
@@ -94,7 +96,7 @@ const Calendar: React.FC = () => {
       {/* Time Selection */}
       {selectedDate && (
         <div>
-          <h2 className="text-md font-semibold text-orange-500 bg-white text-center rounded-lg shadow-md p-4 mb-4">
+          <h2 className="neu-inset rounded-lg backdrop-blur-sm text-md font-semibold text-gray-800 bg-white/80 text-center   p-4 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -108,8 +110,8 @@ const Calendar: React.FC = () => {
                   ${!slot.available
                     ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                     : selectedTime === slot.time
-                      ? 'bg-orange-600 text-white border-orange-600'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-orange-400'
+                      ? 'neu bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C]  text-white border-gray-600'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
                   }
                 `}
               >
@@ -129,7 +131,7 @@ const Calendar: React.FC = () => {
             </p>
             <button
               onClick={handleContinue}
-              className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+              className="mt-4 bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
             >
               Continue to Booking
             </button>
@@ -137,8 +139,10 @@ const Calendar: React.FC = () => {
         </div>
       )}
     </div>
-     </div>
+     </div> 
+       <NavBar/></>
   );
+ 
 };
 
 export default Calendar;

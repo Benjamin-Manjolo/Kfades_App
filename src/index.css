@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* index.css */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;  /* 👈 clean! */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb;
    
 }
 
@@ -18,3 +18,143 @@ code {
     monospace;
 }
 
+.neu-bg { background: #e0e5ec; } 
+  .neu {
+    box-shadow: 6px 6px 12px #b8bec7, -6px -6px 12px #ffffff;
+  }
+  .neu-inset {
+    box-shadow: inset 6px 6px 12px #b8bec7, inset -6px -6px 12px #ffffff;
+  }
+  .neu-soft {
+    box-shadow: 3px 3px 8px #b8bec7, -3px -3px 8px #ffffff;
+  }
+  .neu-btn:active {
+    box-shadow: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;
+  }
+  .toggle-on {
+    box-shadow: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;}
+
+
+ .scene {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffffff 0%, #d1ddff 50%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+    padding:15px;
+  }
+
+  /* The colorful blobs BEHIND everything */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.7;
+  }
+  .blob-pink  { width:450px; height:300px; background:#87f5f7; top:5%;   left:10%;  }
+  .blob-blue  { width:350px; height:700px; background:#2979ff; top:50%;  right:5%;  }
+  .blob-teal  { width:250px; height:250px; background:#00bcd4; bottom:5%; left:35%; }
+
+  /* ===== THE GLASS RECIPE ===== */
+  .glass {
+    background: rgba(255, 255, 255, 0.20);   /* 1. see-through white */
+    backdrop-filter: blur(18px);              /* 2. frosted blur       */
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.20); /* 3. soft white rim     */
+    border-radius: 24px;
+  }
+
+  /* Variations — just change the opacity */
+  .glass-lighter { background: rgba(255,255,255,0.18); }
+  .glass-darker  { background: rgba(0,0,0,0.20);       }
+
+  /* ===== BUTTON ===== */
+  .btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    color: white;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.04); }
+  .btn-accent {
+    background: rgba(41,121,255,0.55);
+    border-color: rgba(41,121,255,0.4);
+  }
+  .btn-accent:hover { background: rgba(41,121,255,0.75); }
+
+  /* ===== INPUT ===== */
+  .glass-input {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    transition: border 0.2s, background 0.2s;
+  }
+  .glass-input::placeholder { color: rgba(255,255,255,0.35); }
+  .glass-input:focus {
+    border-color: rgba(41,121,255,0.6);
+    background: rgba(255,255,255,0.13);
+  }
+
+  /* ===== TAG / BADGE ===== */
+  .tag {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tag:hover, .tag.on { background: rgba(41,121,255,0.4); border-color: rgba(41,121,255,0.5); color: white; }
+
+  /* ===== PROGRESS ===== */
+  .track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 99px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #2979ff, #e040fb);
+    transition: width 0.6s ease;
+  }
+
+  /* ===== TOGGLE ===== */
+  .toggle-wrap {
+    width: 48px; height: 26px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle-wrap.on { background: rgba(41,121,255,0.55); border-color: rgba(41,121,255,0.4); }
+  .toggle-knob {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: white;
+    transition: left 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .toggle-wrap.on .toggle-knob { left: 25px; }
+
+  .divider { height:1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 4px 0; }
+  .label { color: rgba(255,255,255,0.45); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }

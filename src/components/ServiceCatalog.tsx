@@ -25,11 +25,16 @@ const ServiceCatalog: React.FC = () => {
   };
 
   return (
+    <>
     <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat px-4 py-8"
+      className="scene"
      
     >
-      <NavBar />
+       <div className="blob blob-pink" />
+        <div className="blob blob-blue" />
+        <div className="blob blob-teal" />
+       
+     
 
       {/* Sort Controls */}
       <div className="flex gap-2 mb-6 pt-4 mt-10">
@@ -39,8 +44,8 @@ const ServiceCatalog: React.FC = () => {
             onClick={() => setSortBy(option)}
             className={`px-4 py-1 rounded-full text-sm font-medium capitalize transition-colors duration-200 ${
               sortBy === option
-                ? 'bg-orange-400 text-black/90'
-                : 'bg-gray-800 text-white hover:bg-gray-700'
+                ? 'bg-white shadow-md text-black/90'
+                : 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-black hover:bg-white'
             }`}
           >
             {option}
@@ -53,7 +58,7 @@ const ServiceCatalog: React.FC = () => {
         {sortedServices.map((service) => (
           <div
             key={service.id}
-            className="break-inside-avoid mb-3 bg-black/90 rounded-xl overflow-hidden shadow-md"
+            className="break-inside-avoid mb-3 rounded-md bg-gray-500/20 backdrop-blur-sm overflow-hidden"
           >
             {/* Image */}
             {service.image && (
@@ -66,7 +71,7 @@ const ServiceCatalog: React.FC = () => {
              
                 {/* Popular badge */}
                 {service.popular && (
-                  <span className="absolute top-3 right-3 bg-orange-400 text-black/90 text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="absolute top-3 right-3 bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-black/90 text-xs font-bold px-2 py-1 rounded-full">
                     Popular
                   </span>
                 )}
@@ -76,19 +81,19 @@ const ServiceCatalog: React.FC = () => {
             {/* Content */}
             <div className="p-4">
               <div className="flex justify-between items-start mb-1">
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-bold text-black">
                   {service.name}
                 </h2>
               </div>
-              <p className="text-gray-400 text-sm mb-2">
+              <p className="text-black/90 mb-2">
                 {service.description}
               </p>
-              <p className="font-bold text-orange-400 mb-3">
+              <p className="font-semibold text-black mb-3">
                 MWK {service.price} • {service.duration} min
               </p>
               <button
                 onClick={() => handleBookNow(service)}
-                className="w-full bg-orange-400 hover:bg-orange-500 text-black/90 font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                className="w-full bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] hover:bg-[#D0770C] text-black font-semibold py-2 px-4 rounded-md transition-colors duration-200"
               >
                 Book Now
               </button>
@@ -96,7 +101,10 @@ const ServiceCatalog: React.FC = () => {
           </div>
         ))}
       </div>
+      
     </div>
+     <NavBar />
+    </>
   );
 };
 

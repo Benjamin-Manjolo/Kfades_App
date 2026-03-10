@@ -102,7 +102,7 @@ const BookingFlow: React.FC = () => {
       case 0:
         return (
           <div  >
-            <h2 className="text-xl font-semibold shadow-sm  p-6 rounded-md text-orange-500 mb-4">
+            <h2 className="text-xl glass backdrop-blur-sm mt-10 text-gray-700 tracking-wide bg-white/80 p-3 rounded-md mb-3 text-center">
               Confirm Your Service
             </h2>
             {selectedService && (
@@ -119,7 +119,7 @@ const BookingFlow: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl   mt-4  text-gray-700 tracking-wide p-3 rounded-md mb-3 text-center">
               Confirm Date & Time
             </h2>
             {bookingData && (
@@ -146,7 +146,7 @@ const BookingFlow: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name *
+                  Full Name 
                 </label>
                 <input
                   id="name"
@@ -154,13 +154,13 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter your full name"
                 />
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number *
+                  Phone Number
                 </label>
                 <input
                   id="phone"
@@ -168,13 +168,13 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter phone number"
                 />
               </div>
               <div className="md:col-span-2">
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                  Address / Location *
+                  Place
                 </label>
                 <textarea
                   id="address"
@@ -182,30 +182,18 @@ const BookingFlow: React.FC = () => {
                   onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                   required
                   rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Enter your address"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder=""
                 />
               </div>
-              <div className="md:col-span-2">
-                <label htmlFor="specialRequests" className="block text-sm font-medium text-gray-700 mb-1">
-                  Special Requests (optional)
-                </label>
-                <textarea
-                  id="specialRequests"
-                  value={customerInfo.specialRequests}
-                  onChange={(e) => setCustomerInfo({ ...customerInfo, specialRequests: e.target.value })}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  placeholder="Hair type, kids coming, allergies, preferred blade, etc."
-                />
-              </div>
+              
             </div>
           </div>
         );
       case 3:
         return (
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl text-gray-800 mb-4">
               Summary & Payment
             </h2>
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -284,11 +272,12 @@ const BookingFlow: React.FC = () => {
   };
 
   return (
+    <>
     <div  className="min-h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/bgimage.png')" }}>
     <div className="container mx-auto px-4 py-8 max-w-3xl">
-       <NavBar />
-      <h1 className="text-xl mt-10 font-bold text-orange-500 shadow-md bg-white p-6 rounded-md mb-3 text-center">
+       
+      <h1 className="text-xl mt-10 font-bold text-gray-700 tracking-wide shadow-md bg-white p-6 rounded-md mb-3 text-center">
         Book Your Appointment
       </h1>
 
@@ -327,7 +316,7 @@ const BookingFlow: React.FC = () => {
         {renderStepContent(activeStep)}
       </div>
 
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-between">
         <button
           onClick={handleBack}
           disabled={activeStep === 0}
@@ -349,7 +338,9 @@ const BookingFlow: React.FC = () => {
         </button>
       </div>
     </div>
+   
     </div>
+     <NavBar /></>
   );
 };
 
