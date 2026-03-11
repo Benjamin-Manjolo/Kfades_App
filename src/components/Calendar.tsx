@@ -56,8 +56,7 @@ const Calendar: React.FC = () => {
 
   return (
     <>
-    <div   className="min-h-screen mt-10 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/bgimage.png')" }}>
+    <div   className="min-h-screen mt-10 bg-cover bg-center bg-no-repeat">
          
     <div className="container mx-auto px-4 py-8 max-w-4xl">
      

@@ -1,39 +1,69 @@
-# Barber Booking SaaS App Development Plan
+# MVC Restructuring TODO
 
-## Phase 1: Setup and Dependencies
-- [x] Update package.json with required dependencies (Material-UI, React Router, date-fns, axios) - Already installed
-- [x] Install dependencies via npm install - Already done
-- [x] Set up basic project structure (components, types, utils folders)
-- [x] Create TypeScript types for services, bookings, users, etc.
-- [x] Create mock data files for services and bookings
+## Backend MVC Structure
 
-## Phase 2: Public Side - Core UI
-- [ ] Create Welcome component (optional first-time welcome)
-- [ ] Create ServiceCatalog component (list services with sorting/filtering, use Barber Inspo images)
-- [ ] Create Calendar component (availability view, real-time slots)
-- [ ] Create BookingFlow components (4-step process: pick service, date/time, info, summary/confirm)
-- [ ] Set up routing in App.tsx for public and admin sides
+### Phase 1: Setup & Configuration
+- [x] 1.1 Create Backend/config/ directory and move supabase.js
+- [x] 1.2 Update supabase.js import paths
 
-## Phase 3: Location and Travel Logic
-- [ ] Implement distance calculation (mock Google Maps API for now)
-- [ ] Add travel fee logic and display in booking flow
+### Phase 2: Models
+- [x] 2.1 Create Backend/models/Booking.js - Booking schema/validation
+- [x] 2.2 Create Backend/models/Service.js - Service schema
 
-## Phase 4: Notifications and Payments (Mock for now)
-- [ ] Set up mock notification system (SMS/WhatsApp placeholders)
-- [ ] Implement payment options (Stripe/PayPal mocks) in booking summary
+### Phase 3: Controllers
+- [x] 3.1 Create Backend/controllers/bookingController.js - Extract booking logic from server.js
+- [x] 3.2 Create Backend/controllers/paymentController.js - Extract payment logic from payment.js
 
-## Phase 5: Admin Side
-- [ ] Create AdminLogin component (phone + PIN)
-- [ ] Create AdminDashboard (services, hours, bookings, stats)
-- [ ] Add booking management (view, edit, mark status)
+### Phase 4: Routes
+- [x] 4.1 Create Backend/routes/bookingRoutes.js - Booking route definitions
+- [x] 4.2 Create Backend/routes/paymentRoutes.js - Payment route definitions
 
-## Phase 6: Integration and Polish
-- [x] Style all components with Material-UI for beautiful, simple UI
-- [x] Test app functionality - App built successfully
-- [ ] Run app and verify - Requires Node.js installation
+### Phase 5: Services
+- [x] 5.1 Create Backend/services/paychanguService.js - External API calls
 
-## Notes
-- Use images from 'Barber Inspo' folder in service catalog
-- Keep UI simple and beautiful
-- Implement guest-style booking (no accounts)
-- Admin side protected
+### Phase 6: Server Entry Point
+- [x] 6.1 Refactor Backend/server.js to use new MVC structure
+- [x] 6.2 Backend syntax validated - All files pass Node.js syntax check
+
+## Frontend Service Layer (Optional Enhancement)
+
+### Phase 7: Frontend Services
+- [x] 7.1 Create src/services/bookingService.ts - API calls
+- [x] 7.2 Create src/services/paymentService.ts - Payment API calls
+- [ ] 7.3 Update components to use services (Optional - components still work with direct fetch)
+
+---
+
+## MVC Structure Complete!
+
+### Backend Structure:
+```
+Backend/
+├── config/
+│   └── supabase.js           # Database configuration
+├── controllers/
+│   ├── bookingController.js  # Booking business logic
+│   └── paymentController.js  # Payment business logic
+├── models/
+│   ├── Booking.js             # Booking schema/validation
+│   └── Service.js             # Service schema
+├── routes/
+│   ├── bookingRoutes.js       # Booking route definitions
+│   └── paymentRoutes.js       # Payment route definitions
+├── services/
+│   └── paychanguService.js    # External Paychangu API
+├── server.js                  # Entry point (minimal)
+└── package.json
+```
+
+### Frontend Structure:
+```
+src/
+├── services/
+│   ├── bookingService.ts      # Booking API calls
+│   └── paymentService.ts      # Payment API calls
+├── components/
+├── types/
+└── utils/
+```
+

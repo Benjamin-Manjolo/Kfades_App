@@ -94,7 +94,7 @@ const BookingFlow: React.FC = () => {
     localStorage.removeItem('selectedService');
     localStorage.removeItem('bookingData');
 
-    navigate('/');
+    navigate('/payment');
   };
 
   const renderStepContent = (step: number) => {
@@ -274,7 +274,7 @@ const BookingFlow: React.FC = () => {
   return (
     <>
     <div  className="min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/bgimage.png')" }}>
+     >
     <div className="container mx-auto px-4 py-8 max-w-3xl">
        
       <h1 className="text-xl mt-10 font-bold text-gray-700 tracking-wide shadow-md bg-white p-6 rounded-md mb-3 text-center">
