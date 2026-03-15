@@ -3,6 +3,7 @@
  */
 
 const paychanguService = require('../services/paychanguService');
+const supabase = require('../config/supabase');
 
 const paymentController = {
   /**
@@ -178,55 +179,66 @@ const paymentController = {
   },
 
   /**
-   * Handle Paychangu webhook callback for payment confirmation
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
+   * Handle Paychangu webhook callback for payment confirmation - PRODUCTION SECURE VERSION
+   * Verifies payment with PayChangu API before updating booking
+   * Prevents duplicates and deep destructuring crashes
    */
   async handleCallback(req, res) {
     try {
       const callbackData = req.body;
-      
-      console.log('Payment callback received:', callbackData);
+      console.log("Webhook received:", callbackData);
 
-      // Extract relevant information from callback
-      const { 
-        tx_ref, 
-        status, 
-        amount, 
-        customer: { email, first_name, last_name, phone } 
-      } = callbackData;
-
-      // Process the payment based on status
-      if (status === 'successful' || status === 'completed') {
-        // Payment was successful
-        // Here you could:
-        // - Update booking status in database
-        // - Send confirmation email
-        // - Update your own records
-        
-        console.log(`Payment successful for tx_ref: ${tx_ref}, amount: ${amount}`);
-        
-        // TODO: Add your booking/confirmation logic here
-        // Example: Update booking payment status in Supabase
-      } else if (status === 'failed' || status === 'cancelled') {
-        console.log(`Payment failed/cancelled for tx_ref: ${tx_ref}`);
-        // TODO: Handle failed payment
+      const tx_ref = callbackData?.tx_ref;
+      if (!tx_ref) {
+        console.log("tx_ref missing");
+        return res.sendStatus(200);
       }
 
-      // Always respond with 200 to acknowledge receipt
-      res.status(200).json({
-        error: false,
-        message: 'Callback received',
-      });
+      // Prevent duplicate processing
+      const { data: booking, error: dbError } = await supabase
+        .from('bookings')
+        .select('status')
+        .eq('tx_ref', tx_ref)
+        .maybeSingle();
+
+      if (dbError) {
+        console.error("DB lookup error:", dbError.message);
+      }
+      if (booking && booking.status !== 'pending') {
+        console.log(`tx_ref ${tx_ref} already processed (status: ${booking.status})`);
+        return res.sendStatus(200);
+      }
+
+      // Verify with PayChangu API (security rule)
+      const verification = await paychanguService.verifyPayment(tx_ref);
+      
+      if (verification?.data?.status === 'success') {
+        console.log("Payment verified:", tx_ref);
+        
+        // Update booking status to confirmed
+        if (booking) {
+          const { error: updateError } = await supabase
+            .from('bookings')
+            .update({ status: 'confirmed' })
+            .eq('tx_ref', tx_ref);
+            
+          if (updateError) {
+            console.error("Failed to update booking:", updateError.message);
+          } else {
+            console.log(`Booking confirmed for tx_ref: ${tx_ref}`);
+          }
+        }
+      } else {
+        console.log(`Payment verification failed for tx_ref: ${tx_ref}`);
+      }
+
+      res.sendStatus(200);
     } catch (error) {
-      console.error('Callback error:', error.message);
-      // Still return 200 to prevent Paychangu from retrying
-      res.status(200).json({
-        error: false,
-        message: 'Callback processed',
-      });
+      console.error("Webhook error:", error);
+      res.sendStatus(200);
     }
   },
+
 };
 
 module.exports = paymentController;

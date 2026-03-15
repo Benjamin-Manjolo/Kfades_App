@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavBar from "./NavBar";
+// import NavBar from "./NavBar";
 import paymentService, { PaymentInitData } from "../services/paymentService";
 
 type CardType = "airtel" | "tnm" | null;
@@ -256,7 +256,7 @@ const PaymentPage: React.FC = () => {
       </div>
         
     </div>
-     <NavBar />
+    
     </>
   );
 };

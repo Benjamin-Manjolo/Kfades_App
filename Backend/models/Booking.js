@@ -55,8 +55,10 @@ class BookingModel {
       special_requests: booking.specialRequests || null,
       payment_option: booking.paymentOption,
       status: booking.status,
+      tx_ref: booking.tx_ref || null,
       created_at: new Date().toISOString(),
     };
+
   }
 
   /**
@@ -77,8 +79,10 @@ class BookingModel {
       specialRequests: dbBooking.special_requests,
       paymentOption: dbBooking.payment_option,
       status: dbBooking.status,
+      tx_ref: dbBooking.tx_ref,
       createdAt: dbBooking.created_at,
     };
+
   }
 
   /**
