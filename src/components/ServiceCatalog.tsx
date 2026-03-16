@@ -32,9 +32,15 @@ const ServiceCatalog: React.FC = () => {
         <div className="blob blob-teal" />
        <div className='m-0 '>
      
-
+       <h1 className="text-[20px] font-semibold  text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
+      KURUPT
+  </h1>
+  <h1 className="text-md font-bold tracking-widest text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
+      Barbeshop
+  </h1>
       {/* Sort Controls */}
-      <div className="flex gap-2 mb-6 pt-4 mt-10">
+      <div className="flex gap-2 mb-6 pt-4 mt-5">
+       
         {(['popular', 'price', 'duration'] as const).map((option) => (
           <button
             key={option}
@@ -76,6 +82,7 @@ const ServiceCatalog: React.FC = () => {
             )}
 
             {/* Content */}
+            
             <div className="p-4">
               <div className="flex justify-between items-start mb-1">
                 <h2 className="text-lg font-bold text-black">

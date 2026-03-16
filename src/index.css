@@ -171,6 +171,26 @@ code {
   animation: float 2s infinite alternate ease-in-out;
 }
 
+
+@keyframes neonGlow {
+      0%, 100% {
+        text-shadow: 
+          0 0 5px #251ac5,
+          0 0 10px #ee1b5d,
+          0 0 20px #0ff,
+          0 0 40px #0ff,
+          0 0 80px #0ff;
+      }
+      50% {
+        text-shadow: 
+          0 0 10px #30ee00,
+          0 0 20px #05a00d,
+          0 0 40px #0ff,
+          0 0 70px #0ff,
+          0 0 120px #0ff;
+      }
+    }
+
 @keyframes float{
   from{
     transform: translateY(-20px) scale(1);
