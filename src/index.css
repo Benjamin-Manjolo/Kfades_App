@@ -59,7 +59,7 @@ code {
   }
   .blob-pink  { width:150px; height:100px; background:#87f5f7; top:5%;   left:10%;  }
   .blob-blue  { width:110px; height:250px; background:#2979ff; top:50%;  right:5%;  }
-  .blob-teal  { width:80px; height:80px; background:#00bcd4; bottom:5%; left:35%; }
+  .blob-teal  { width:150px; height:100px; background:#00bcd4; bottom:5%; left:35%; }
 
   /* ===== THE GLASS RECIPE ===== */
   .glass {

@@ -60,12 +60,12 @@ const Calendar: React.FC = () => {
      
     
          
-    <div className='' >
+    <div className='animate-[neonGlow_1.5s_eagse-in-out_infinite_alternate] h-screen w-full' >
        <div className="blob blob-pink" />
         <div className="blob blob-blue" />
         <div className="blob blob-teal" />
      
-      <div className=' rounded-xl p-6 pt-4 pb-4 bg-white backdrop-blur-sm gap-3 mb-6'
+      <div className=' rounded-xl  p-6 pt-4 pb-4 bg-white backdrop-blur-sm gap-3 mb-6'
       ><h1 className="text-lg font-semibold text-gray-700 tracking-wide  mb-2 text-center">
          
         Select Date & Time
@@ -77,13 +77,13 @@ const Calendar: React.FC = () => {
       {/* Date Selection */}
       <div className="mb-6">
        
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 bg-white rounded-lg p-3 gap-2">
           {dates.map((date) => (
             <button
               key={date.toISOString()}
               onClick={() => handleDateSelect(date)}
               className={`
-                py-3 px-2 rounded-lg backdrop-blur-sm transition-colors duration-200 flex flex-col items-center 
+                py-3 px-2 shadow-md rounded-lg backdrop-blur-sm transition-colors duration-200 flex flex-col items-center 
                 ${selectedDate?.toDateString() === date.toDateString()
                   ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white '
                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
@@ -99,8 +99,8 @@ const Calendar: React.FC = () => {
 
       {/* Time Selection */}
       {selectedDate && (
-        <div>
-          <h2 className=" rounded-lg backdrop-blur-sm text-md  font-semibold text-gray-800 bg-white text-center   p-4 mb-4">
+        <div className='bg-white rounded-md p-3'>
+          <h2 className=" rounded-lg backdrop-blur-sm text-md  font-semibold text-gray-800 bg-white text-center shadow-lg   p-4 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -114,7 +114,7 @@ const Calendar: React.FC = () => {
                   ${!slot.available
                     ? 'bg-gray-400  text-black/10 border-green-200 cursor-not-allowed'
                     : selectedTime === slot.time
-                      ? ' bg-white rounded-lg  text-green-400 border-gray-600'
+                      ? ' bg-white rounded-lg  bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white border-gray-600'
                       : 'bg-white text-black rounded-lg border-gray-200 hover:border-blue-400'
                   }
                 `}

@@ -36,7 +36,7 @@ const ServiceCatalog: React.FC = () => {
       KURUPT
   </h1>
   <h1 className="text-md font-bold tracking-widest text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
-      Barbeshop
+      Barbershop
   </h1>
       {/* Sort Controls */}
       <div className="flex gap-2 mb-6 pt-4 mt-5">
