@@ -10,7 +10,11 @@ body {
   font-family: 'IBM Plex Sans', sans-serif;  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('./assets/bgimage.png');
+    min-height: 100vh;
+    background: linear-gradient(135deg, #000000 0%, #1b202f 50%, #8ab7fb 100%);
+    padding:15px;
+   
+  
   
    
 }
@@ -36,10 +40,9 @@ code {
   .toggle-on {
     box-shadow: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;}
 
-
  .scene {
     min-height: 100vh;
-    background: linear-gradient(135deg, #ffffff 0%, #d1ddff 50%, #ffffff 100%);
+    background: linear-gradient(135deg, #000000 0%, #1b202f 50%, #8ab7fb 100%);
     position: relative;
     overflow: hidden;
     padding:15px;
@@ -51,17 +54,19 @@ code {
     border-radius: 50%;
     filter: blur(60px);
     opacity: 0.7;
+    overflow: hidden;
+    animation: float 20s infinite alternate ease-in-out;
   }
-  .blob-pink  { width:450px; height:300px; background:#87f5f7; top:5%;   left:10%;  }
-  .blob-blue  { width:350px; height:700px; background:#2979ff; top:50%;  right:5%;  }
-  .blob-teal  { width:250px; height:250px; background:#00bcd4; bottom:5%; left:35%; }
+  .blob-pink  { width:150px; height:100px; background:#87f5f7; top:5%;   left:10%;  }
+  .blob-blue  { width:110px; height:250px; background:#2979ff; top:50%;  right:5%;  }
+  .blob-teal  { width:80px; height:80px; background:#00bcd4; bottom:5%; left:35%; }
 
   /* ===== THE GLASS RECIPE ===== */
   .glass {
-    background: rgba(255, 255, 255, 0.20);   /* 1. see-through white */
-    backdrop-filter: blur(18px);              /* 2. frosted blur       */
+    background: rgba(255, 255, 255, 0.20);   
+    backdrop-filter: blur(18px);              
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.20); /* 3. soft white rim     */
+    border: 1px solid rgba(255,255,255,0.20); 
     border-radius: 24px;
   }
 
@@ -160,3 +165,17 @@ code {
 
   .divider { height:1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 4px 0; }
   .label { color: rgba(255,255,255,0.45); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+
+
+  .blob{
+  animation: float 2s infinite alternate ease-in-out;
+}
+
+@keyframes float{
+  from{
+    transform: translateY(-20px) scale(1);
+  }
+  to{
+    transform: translateY(20px) scale(1.2);
+  }
+}

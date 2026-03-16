@@ -10,7 +10,6 @@ import BarberInspo from './components/BarberInspo';
 import PaymentPage from './components/Paymentpage';
 import PayCheckout from './components/PayCheckout';
 
-
 function App() {
   return (
     <Router>
@@ -30,3 +29,4 @@ function App() {
 }
 
 export default App;
+

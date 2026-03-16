@@ -22,7 +22,7 @@ const Welcome: React.FC = () => {
       </video>
 
       {/* Dark Gradient Overlay - bottom 60% */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent" 
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent"
            style={{ background: 'linear-gradient(to top, black 0%, black 15%, transparent 100%)' }}>
       </div>
 
@@ -58,3 +58,4 @@ const Welcome: React.FC = () => {
 };
 
 export default Welcome;
+

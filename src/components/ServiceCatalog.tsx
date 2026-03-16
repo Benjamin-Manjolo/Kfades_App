@@ -26,14 +26,11 @@ const ServiceCatalog: React.FC = () => {
 
   return (
     <>
-    <div
-      className="scene"
-     
-    >
+    
        <div className="blob blob-pink" />
         <div className="blob blob-blue" />
         <div className="blob blob-teal" />
-       
+       <div className='m-0 '>
      
 
       {/* Sort Controls */}
@@ -42,9 +39,9 @@ const ServiceCatalog: React.FC = () => {
           <button
             key={option}
             onClick={() => setSortBy(option)}
-            className={`px-4 py-1 rounded-full text-sm font-medium capitalize transition-colors duration-200 ${
+            className={`px-4 py-1 rounded-full text-sm font-medium backdrop-blur-sm capitalize transition-colors duration-200 ${
               sortBy === option
-                ? 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] shadow-md text-black/90'
+                ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] to-[#333333] shadow-md text-white'
                 : 'bg-white shadow-md text-black hover:bg-white'
             }`}
           >
@@ -71,7 +68,7 @@ const ServiceCatalog: React.FC = () => {
              
                 {/* Popular badge */}
                 {service.popular && (
-                  <span className="absolute top-3 right-3 bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-black/90 text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="absolute top-3 right-3 bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] to-[#333333] text-white text-xs font-bold px-2 py-1 rounded-full">
                     Popular
                   </span>
                 )}
@@ -85,15 +82,15 @@ const ServiceCatalog: React.FC = () => {
                   {service.name}
                 </h2>
               </div>
-              <p className="text-black/90 mb-2">
+              <p className="text-white mb-2">
                 {service.description}
               </p>
-              <p className="font-semibold text-black mb-3">
+              <p className="font-semibold text-white mb-3">
                 MWK {service.price} • {service.duration} min
               </p>
               <button
                 onClick={() => handleBookNow(service)}
-                className="w-full bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] hover:bg-[#D0770C] text-black font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                className="w-full bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] hover:bg-[#333333] text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
               >
                 Book Now
               </button>
@@ -102,8 +99,8 @@ const ServiceCatalog: React.FC = () => {
         ))}
       </div>
       
+   
     </div>
-     <NavBar />
     </>
   );
 };

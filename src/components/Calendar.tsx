@@ -56,11 +56,16 @@ const Calendar: React.FC = () => {
 
   return (
     <>
-    <div   className="min-h-screen mt-10 bg-cover bg-center bg-no-repeat">
-         
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+  
      
-      <div className=' rounded-xl px-4 py-3 bg-white backdrop-blur-sm gap-3 mb-6'
+    
+         
+    <div className='' >
+       <div className="blob blob-pink" />
+        <div className="blob blob-blue" />
+        <div className="blob blob-teal" />
+     
+      <div className=' rounded-xl p-6 pt-4 pb-4 bg-white backdrop-blur-sm gap-3 mb-6'
       ><h1 className="text-lg font-semibold text-gray-700 tracking-wide  mb-2 text-center">
          
         Select Date & Time
@@ -78,9 +83,9 @@ const Calendar: React.FC = () => {
               key={date.toISOString()}
               onClick={() => handleDateSelect(date)}
               className={`
-                py-3 px-2 rounded-lg border-2 transition-colors duration-200 flex flex-col items-center
+                py-3 px-2 rounded-lg backdrop-blur-sm transition-colors duration-200 flex flex-col items-center 
                 ${selectedDate?.toDateString() === date.toDateString()
-                  ? 'bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] text-white '
+                  ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white '
                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
                 }
               `}
@@ -95,7 +100,7 @@ const Calendar: React.FC = () => {
       {/* Time Selection */}
       {selectedDate && (
         <div>
-          <h2 className=" rounded-lg backdrop-blur-sm text-md font-semibold text-gray-800 bg-white text-center   p-4 mb-4">
+          <h2 className=" rounded-lg backdrop-blur-sm text-md  font-semibold text-gray-800 bg-white text-center   p-4 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -105,12 +110,12 @@ const Calendar: React.FC = () => {
                 onClick={() => handleTimeSelect(slot.time)}
                 disabled={!slot.available}
                 className={`
-                  py-2 px-1 rounded-md border transition-colors duration-200 text-sm
+                  py-2 px-1 rounded-md border transition-colors backdrop-blur-sm duration-200 text-sm
                   ${!slot.available
-                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                    ? 'bg-gray-400  text-black/10 border-green-200 cursor-not-allowed'
                     : selectedTime === slot.time
-                      ? 'neu bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C]  text-white border-gray-600'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                      ? ' bg-white rounded-lg  text-green-400 border-gray-600'
+                      : 'bg-white text-black rounded-lg border-gray-200 hover:border-blue-400'
                   }
                 `}
               >
@@ -123,14 +128,14 @@ const Calendar: React.FC = () => {
 
       {/* Continue Button */}
       {selectedDate && selectedTime && (
-        <div className="mt-8 text-center">
+        <div className="mt-8 text-center backdrop-blur-md">
           <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto mb-4">
             <p className="text-lg text-gray-700">
               Selected: {format(selectedDate, 'EEEE, MMMM d')} at {selectedTime}
             </p>
             <button
               onClick={handleContinue}
-              className="mt-4 bg-gradient-to-r from-[#F1B20B] via-[#E89804] to-[#D0770C] hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+              className="mt-4 bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
             >
               Continue to Booking
             </button>
@@ -138,8 +143,9 @@ const Calendar: React.FC = () => {
         </div>
       )}
     </div>
-     </div> 
-       <NavBar/></>
+   
+     
+      </>
   );
  
 };
