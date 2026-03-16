@@ -102,14 +102,14 @@ const BookingFlow: React.FC = () => {
       case 0:
         return (
           <div  >
-            <h2 className="text-xl glass backdrop-blur-sm mt-10 text-gray-700 tracking-wide bg-white/80 p-3 rounded-md mb-3 text-center">
+            <h2 className="text-xl mt-10 text-white  tracking-wide bg-black p-3 rounded-md mb-3  text-center">
               Confirm Your Service
             </h2>
             {selectedService && (
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-bold text-gray-800">{selectedService.name}</h3>
-                <p className="text-gray-600 mt-1">{selectedService.description}</p>
-                <p className="text-gray-500 text-sm mt-2">
+              <div className="bg-[#151B23] rounded-lg shadow-md p-4">
+                <h3 className="text-xl font-bold text-white">{selectedService.name}</h3>
+                <p className="text-white mt-1">{selectedService.description}</p>
+                <p className="text-white text-sm mt-2">
                   ${selectedService.price} • {selectedService.duration} minutes
                 </p>
               </div>
@@ -119,12 +119,12 @@ const BookingFlow: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-xl   mt-4  text-gray-700 tracking-wide p-3 rounded-md mb-3 text-center">
+            <h2 className="text-xl   mt-4  bg-[#0D1117] border-2 border-[#3B424A] text-white tracking-wide p-3 rounded-md mb-3 text-center">
               Confirm Date & Time
             </h2>
             {bookingData && (
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <p className="text-gray-700">
+              <div className="bg-[#0D1117] border-t-2 border-b-2 border-[#3B424A] rounded-lg shadow-md p-4">
+                <p className="text-white ">
                   Date: {new Date(bookingData.date).toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -132,7 +132,7 @@ const BookingFlow: React.FC = () => {
                     day: 'numeric'
                   })}
                 </p>
-                <p className="text-gray-700 mt-1">Time: {bookingData.time}</p>
+                <p className="text-white mt-1">Time: {bookingData.time}</p>
               </div>
             )}
           </div>
@@ -140,12 +140,12 @@ const BookingFlow: React.FC = () => {
       case 2:
         return (
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl font-semibold text-white mb-4">
               Your Information
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 bg-[#0D1117] md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
                   Full Name 
                 </label>
                 <input
@@ -154,12 +154,12 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
                   required
-                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-white tracking-wide shadow-md bg-[#0D1117/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
                   placeholder="Enter your full name"
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="phone" className="block text-sm font-medium text-white mb-1">
                   Phone Number
                 </label>
                 <input
@@ -168,12 +168,12 @@ const BookingFlow: React.FC = () => {
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
                   required
-                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-white tracking-wide shadow-md bg-[#0D1117/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
                   placeholder="Enter phone number"
                 />
               </div>
               <div className="md:col-span-2">
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="address" className="block text-sm font-medium text-white mb-1">
                   Place
                 </label>
                 <textarea
@@ -182,7 +182,7 @@ const BookingFlow: React.FC = () => {
                   onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                   required
                   rows={2}
-                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-gray-700 tracking-wide shadow-md bg-white/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
+                  className="w-full px-3 py-3 text-md neu-inset backdrop-blur-sm font-thin text-white tracking-wide shadow-md bg-[#0D1117/10 p-6 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
                   placeholder=""
                 />
               </div>
@@ -193,30 +193,30 @@ const BookingFlow: React.FC = () => {
       case 3:
         return (
           <div>
-            <h2 className="text-xl text-gray-800 mb-4">
+            <h2 className="text-xl border-2 rounded-md border-[#3B424A] p-3 text-white mb-4">
               Summary & Payment
             </h2>
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            <div className="bg-[#151B23] border-2 rounded-md border-[#3B424A] rounded-lg shadow-md p-6 mb-6">
+              <h3 className="text-lg font-semibold text-white mb-3">
                 Booking Details
               </h3>
-              <p className="text-gray-700">Service: {selectedService?.name}</p>
-              <p className="text-gray-700">
+              <p className="text-white">Service: {selectedService?.name}</p>
+              <p className="text-white">
                 Date: {bookingData && new Date(bookingData.date).toLocaleDateString()}
               </p>
-              <p className="text-gray-700">Time: {bookingData?.time}</p>
-              <p className="text-gray-700">Name: {customerInfo.name}</p>
-              <p className="text-gray-700">Phone: {customerInfo.phone}</p>
-              <p className="text-gray-700">Address: {customerInfo.address}</p>
+              <p className="text-white">Time: {bookingData?.time}</p>
+              <p className="text-white">Name: {customerInfo.name}</p>
+              <p className="text-white">Phone: {customerInfo.phone}</p>
+              <p className="text-white">Address: {customerInfo.address}</p>
               {customerInfo.specialRequests && (
-                <p className="text-gray-700">Special Requests: {customerInfo.specialRequests}</p>
+                <p className="text-white">Special Requests: {customerInfo.specialRequests}</p>
               )}
-              <p className="text-xl font-bold text-gray-800 mt-4">
+              <p className="text-xl font-bold text-white mt-4">
                 Total: ${selectedService?.price}
               </p>
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            <h3 className="text-lg font-semibold text-white mb-3">
               Payment Option
             </h3>
             <div className="space-y-2">
@@ -229,7 +229,7 @@ const BookingFlow: React.FC = () => {
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
                   className="w-4 h-4 text-red-600"
                 />
-                <span className="text-gray-700">
+                <span className="text-white hover:text-black">
                   Deposit (${Math.round(selectedService!.price * 0.3)}) - Required to secure slot
                   <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
     soon!
@@ -245,23 +245,23 @@ const BookingFlow: React.FC = () => {
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
                   className="w-4 h-4 text-white"
                 />
-                <span className="text-gray-700">
+                <span className="text-white hover:text-black">
                   Pay full amount now (${selectedService!.price}) {`  `} {
   <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
     soon!
   </span>}
                 </span>
               </label>
-              <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+              <label className="flex items-center hover:text-black space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                 <input
                   type="radio"
                   name="payment"
                   value="cash"
                   checked={paymentOption === 'cash'}
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-white"
+                  className="w-4 h-4 hover:text-black"
                 />
-                <span className="text-gray-700">Cash on arrival </span>
+                <span className="text-white hover:text-black">Cash on arrival </span>
               </label>
             </div>
           </div>
@@ -283,7 +283,7 @@ const BookingFlow: React.FC = () => {
     <div className="">
       
        
-      <h1 className="text-xl mt-10 font-bold backdrop-blur-sm text-gray-700 tracking-wide shadow-md bg-white p-6 rounded-md mb-3 text-center">
+      <h1 className="text-xl mt-10 font-bold backdrop-blur-sm text-white tracking-wide shadow-md bg-[#0D1117 p-6 rounded-md mb-3 text-center">
         Book Your Appointment
       </h1>
 
@@ -299,13 +299,13 @@ const BookingFlow: React.FC = () => {
                     ? 'bg-green-600 text-white'
                     : index === activeStep
                       ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white'
-                      : 'bg-gray-200 text-gray-600'
+                      : 'bg-gray-200 text-white-600'
                   }
                 `}
               >
                 {index < activeStep ? '✓' : index + 1}
               </div>
-              <span className={`text-xs backdrop-blur-sm  mt-1 ${index === activeStep ? 'text-white font-medium' : 'text-gray-500'}`}>
+              <span className={`text-xs backdrop-blur-sm  mt-1 ${index === activeStep ? 'text-white font-medium' : 'text-white-500'}`}>
                 {label}
               </span>
             </div>
@@ -318,7 +318,7 @@ const BookingFlow: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-gray-50 backdrop-blur-sm  rounded-lg p-6 mb-6">
+      <div className="bg-[#0D1117] backdrop-blur-sm m-1 border-2 border-[#3D444D] rounded-lg p-6 mb-6">
         {renderStepContent(activeStep)}
       </div>
 
@@ -329,8 +329,8 @@ const BookingFlow: React.FC = () => {
           className={`
             px-6 py-2 rounded-md font-medium backdrop-blur-sm  transition-colors duration-200
             ${activeStep === 0
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-gray-700 hover:bg-gray-100'
+              ? 'text-white-400 cursor-not-allowed'
+              : 'text-white hover:bg-gray-100'
             }
           `}
         >

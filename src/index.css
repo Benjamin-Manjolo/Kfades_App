@@ -12,11 +12,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     background: linear-gradient(135deg, #000000 0%, #1b202f 50%, #8ab7fb 100%);
-    padding:15px;
-   
-  
-  
-   
+    
 }
 
 code {

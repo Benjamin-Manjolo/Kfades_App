@@ -58,35 +58,35 @@ const Calendar: React.FC = () => {
     <>
   
      
-    
+    <div className='bg-[#0D1117] p-15'>
          
     <div className='animate-[neonGlow_1.5s_eagse-in-out_infinite_alternate] h-screen w-full' >
        <div className="blob blob-pink" />
         <div className="blob blob-blue" />
         <div className="blob blob-teal" />
      
-      <div className=' rounded-xl  p-6 pt-4 pb-4 bg-white backdrop-blur-sm gap-3 mb-6'
-      ><h1 className="text-lg font-semibold text-gray-700 tracking-wide  mb-2 text-center">
+      <div className=' rounded-xl border-[#3D444D] border-2 p-3 pt-4 pb-4 bg-[#0D1117] m-1 backdrop-blur-sm gap-3 mt-6 mb-6'
+      ><h1 className="text-lg font-semibold text-white tracking-wide  mb-2 text-center">
          
         Select Date & Time
       </h1>
-      <p className='text-center'> choose your preferred time slot</p>
+      <p className='text-center text-white'> choose your preferred time slot</p>
       </div>
      
 
       {/* Date Selection */}
-      <div className="mb-6">
+      <div className="mb-6 bg-[#0D1117] border-2 m-1 border-[#3D444D] backdrop-blur-sm rounded-lg p-4">
        
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 bg-white rounded-lg p-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 bg-[#0D1117] rounded-lg p-3 gap-2">
           {dates.map((date) => (
             <button
               key={date.toISOString()}
               onClick={() => handleDateSelect(date)}
               className={`
-                py-3 px-2 shadow-md rounded-lg backdrop-blur-sm transition-colors duration-200 flex flex-col items-center 
+                py-3 px-2 shadow-md rounded-lg  backdrop-blur-sm transition-colors duration-200 flex flex-col items-center 
                 ${selectedDate?.toDateString() === date.toDateString()
-                  ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white '
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
+                  ? 'bg-gradient-to-r from-[#ffffff] via-[#ffffff] to-[#ffffff] font-semibold text-black '
+                  : 'bg-[#212830] text-white border-gray-200 hover:border-gray-400'
                 }
               `}
             >
@@ -99,8 +99,8 @@ const Calendar: React.FC = () => {
 
       {/* Time Selection */}
       {selectedDate && (
-        <div className='bg-white rounded-md p-3'>
-          <h2 className=" rounded-lg backdrop-blur-sm text-md  font-semibold text-gray-800 bg-white text-center shadow-lg   p-4 mb-4">
+        <div className='bg-[#0D1117] rounded-md p-3'>
+          <h2 className=" rounded-lg backdrop-blur-sm text-md  font-semibold text-white bg-[#0D1117] text-center border-2 border-[#373E46]  p-4 mb-4">
             Available Times for {format(selectedDate, 'EEEE, MMMM d')}
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -110,12 +110,12 @@ const Calendar: React.FC = () => {
                 onClick={() => handleTimeSelect(slot.time)}
                 disabled={!slot.available}
                 className={`
-                  py-2 px-1 rounded-md border transition-colors backdrop-blur-sm duration-200 text-sm
+                  py-2 px-1 rounded-md  transition-colors backdrop-blur-sm duration-200 text-sm
                   ${!slot.available
-                    ? 'bg-gray-400  text-black/10 border-green-200 cursor-not-allowed'
+                    ? 'bg-[#212830]  text-gray-400  cursor-not-allowed'
                     : selectedTime === slot.time
-                      ? ' bg-white rounded-lg  bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white border-gray-600'
-                      : 'bg-white text-black rounded-lg border-gray-200 hover:border-blue-400'
+                      ? ' bg-white rounded-lg  bg-gradient-to-r from-white via-white to-white text-black'
+                      : 'bg-[#212830] text-white rounded-lg  '
                   }
                 `}
               >
@@ -128,14 +128,14 @@ const Calendar: React.FC = () => {
 
       {/* Continue Button */}
       {selectedDate && selectedTime && (
-        <div className="mt-8 text-center backdrop-blur-md">
-          <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto mb-4">
-            <p className="text-lg text-gray-700">
+        <div className="mt-8 text-center border-2 border-[#0E141D] bg-[#0D1117] backdrop-blur-md">
+          <div className="bg-[#0D1117] border-t-2 border-[#212830] rounded-lg shadow-md p-6 max-w-md mx-auto mb-4">
+            <p className="text-lg text-white">
               Selected: {format(selectedDate, 'EEEE, MMMM d')} at {selectedTime}
             </p>
             <button
               onClick={handleContinue}
-              className="mt-4 bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+              className="mt-4 bg-white hover:bg-gray-700 text-[#0D1117] font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
             >
               Continue to Booking
             </button>
@@ -144,7 +144,7 @@ const Calendar: React.FC = () => {
       )}
     </div>
    
-     
+     </div>
       </>
   );
  

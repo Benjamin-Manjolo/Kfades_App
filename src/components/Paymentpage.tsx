@@ -6,11 +6,11 @@ type CardType = "airtel" | "tnm" | null;
 
 const PaymentPage: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<CardType>(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("0990381394");
   const [amount, setAmount] = useState<number | null>(null);
   
   // User info fields (required for Paychangu API)
-  const [firstName, setFirstName] = useState("");
+  const [firstName, setFirstName] = useState("customer");
   const [lastName, setLastName] = useState("kfades");
   const [email, setEmail] = useState("kfades@gmail.com");
   
@@ -27,7 +27,7 @@ const PaymentPage: React.FC = () => {
 
   const handlePay = async () => {
     // Validation
-    if (!selectedCard || !phoneNumber || !amount) {
+    if (!amount) {
       setError("Please complete all fields");
       return;
     }
@@ -107,7 +107,7 @@ const PaymentPage: React.FC = () => {
       <div className="w-full bg-white rounded-md shadow-md p-6 ">
             
 
-        <div className="space-y-3 shadow-md bg-gray-50 rounded-md">
+        <div className="">
           
 
           <div className="flex p-5 gap-4">
@@ -117,7 +117,7 @@ const PaymentPage: React.FC = () => {
                 selectedCard === "airtel"
                   ? "ring-4 ring-gray-400"
                   : ""
-              } bg-red-600`}
+              } bg-white`}
             >
               airtel
             </button>
@@ -128,7 +128,7 @@ const PaymentPage: React.FC = () => {
                 selectedCard === "tnm"
                   ? "ring-4 ring-gray-400"
                   : ""
-              } bg-green-600`}
+              } bg-white`}
             >
               tnm
             </button>
@@ -163,19 +163,19 @@ const PaymentPage: React.FC = () => {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full neu-inset bg-gray-200 rounded-md p-2 my-2 outline-none"
-                placeholder="First name"
+                className="w-full text-white bg-white rounded-md p-2 my-2 outline-none"
+                placeholder=""
               />
             </div>
             <div>
-              <label className="block text-md text-gray-600">
+              <label className="block text-md text-white">
                 Last Name
               </label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full neu-inset bg-gray-200 rounded-md p-2 my-2 outline-none"
+                className="w-full bg-white rounded-md p-2 my-2 outline-none"
                 placeholder="Last name"
               />
             </div>

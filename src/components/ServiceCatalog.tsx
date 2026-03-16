@@ -26,6 +26,7 @@ const ServiceCatalog: React.FC = () => {
 
   return (
     <>
+    <div className=''>
     
        <div className="blob blob-pink" />
         <div className="blob blob-blue" />
@@ -107,6 +108,7 @@ const ServiceCatalog: React.FC = () => {
       </div>
       
    
+    </div>
     </div>
     </>
   );
