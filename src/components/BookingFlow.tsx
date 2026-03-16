@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
 import NavBar from './NavBar';
+import paymentService, { PaymentInitData } from "../services/paymentService";
+
+
 
 const steps = ['Service', 'Time', 'Info', 'Confirm'];
 
@@ -15,6 +18,16 @@ const BookingFlow: React.FC = () => {
     address: '',
     specialRequests: '',
   });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const generateTxRef = () => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    return `TX_${timestamp}_${random}`;
+  };
   const [paymentOption, setPaymentOption] = useState<'deposit' | 'full' | 'cash'>('deposit');
   const navigate = useNavigate();
 
@@ -39,6 +52,44 @@ const BookingFlow: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+ const handlePay = async () => {
+  if (!selectedService) return;
+
+  setIsLoading(true);
+  setError(null);
+
+  try {
+    const paymentData: PaymentInitData = {
+      amount: selectedService.price,
+      tx_ref: generateTxRef(),
+      first_name: customerInfo.name,
+      last_name: "customer",
+      email: "customer@email.com",
+      callback_url: "http://localhost:3001/paychangu/callback",
+      return_url: "http://localhost:3000/checkout",
+    };
+
+    console.log("Initiating payment:", paymentData);
+
+    const response = await paymentService.initiateTransaction(paymentData);
+
+    if (response.error) {
+      setError(response.message || "Payment failed");
+      return;
+    }
+
+    if (response.data?.data?.checkout_url) {
+      window.location.href = response.data.data.checkout_url;
+    }
+
+  } catch (err) {
+    console.error("Payment error:", err);
+    setError("Payment failed. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+  
   const handleFinish = async () => {
     // Mock booking creation
     const newBooking: Booking = {
@@ -87,6 +138,10 @@ const BookingFlow: React.FC = () => {
     }
 
     // In real app, this would be an API call
+   
+
+   
+    {}
     console.log('New booking:', newBooking);
     alert('Booking confirmed! You will receive a confirmation SMS/WhatsApp.');
 
@@ -94,8 +149,13 @@ const BookingFlow: React.FC = () => {
     localStorage.removeItem('selectedService');
     localStorage.removeItem('bookingData');
 
-    navigate('/payment');
+    navigate('/checkout');
   };
+  
+  const handleConfirmBooking = async () => {
+  await handleFinish();  // save booking
+  await handlePay();     // start payment
+};
 
   const renderStepContent = (step: number) => {
     switch (step) {
@@ -226,10 +286,11 @@ const BookingFlow: React.FC = () => {
                   name="payment"
                   value="deposit"
                   checked={paymentOption === 'deposit'}
+                  
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-red-600"
+                  className="w-4 h-4 peer"
                 />
-                <span className="text-white hover:text-black">
+                <span className="text-white peer-checked:text-black">
                   Deposit (${Math.round(selectedService!.price * 0.3)}) - Required to secure slot
                   <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
     soon!
@@ -242,10 +303,11 @@ const BookingFlow: React.FC = () => {
                   name="payment"
                   value="full"
                   checked={paymentOption === 'full'}
+                  
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 text-white"
+                  className="w-4 h-4 peer"
                 />
-                <span className="text-white hover:text-black">
+                <span className="text-white peer-checked:text-black">
                   Pay full amount now (${selectedService!.price}) {`  `} {
   <span className="bg-red-600 text-white text-sm font-medium px-2 py-1 rounded-full">
     soon!
@@ -259,9 +321,9 @@ const BookingFlow: React.FC = () => {
                   value="cash"
                   checked={paymentOption === 'cash'}
                   onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                  className="w-4 h-4 hover:text-black"
+                  className="w-4 h-4 peer"
                 />
-                <span className="text-white hover:text-black">Cash on arrival </span>
+                <span className="text-white peer-checked:text-black">Cash on arrival </span>
               </label>
             </div>
           </div>
@@ -337,7 +399,7 @@ const BookingFlow: React.FC = () => {
           Back
         </button>
         <button
-          onClick={activeStep === steps.length - 1 ? handleFinish : handleNext}
+         onClick={activeStep === steps.length - 1 ? handleConfirmBooking : handleNext}
           className="bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] hover:bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white font-semibold py-2 px-6 rounded-md transition-colors backdrop-blur-sm  duration-200"
         >
           {activeStep === steps.length - 1 ? 'Confirm Booking' : 'Next'}

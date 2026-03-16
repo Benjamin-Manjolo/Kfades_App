@@ -7,7 +7,6 @@ import BookingFlow from './components/BookingFlow';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import BarberInspo from './components/BarberInspo';
-import PaymentPage from './components/Paymentpage';
 import PayCheckout from './components/PayCheckout';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
         <Route path="/booking" element={<BookingFlow />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/payment" element={<PaymentPage />} />
         <Route path="/checkout" element={<PayCheckout />} />
         <Route path="/barber-inspo" element={<BarberInspo />} />
       </Routes>
