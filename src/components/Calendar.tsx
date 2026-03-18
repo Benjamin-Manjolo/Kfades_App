@@ -58,7 +58,7 @@ const Calendar: React.FC = () => {
     <>
   
      
-    <div className='bg-[#0D1117] p-15'>
+    <div className='bg-[#0D1117] p-15 pb-80'>
          
     <div className='animate-[neonGlow_1.5s_eagse-in-out_infinite_alternate] h-screen w-full' >
        <div className="blob blob-pink" />
@@ -128,7 +128,7 @@ const Calendar: React.FC = () => {
 
       {/* Continue Button */}
       {selectedDate && selectedTime && (
-        <div className="mt-8 text-center border-2 border-[#0E141D] bg-[#0D1117] backdrop-blur-md">
+        <div className="mt-8 mb-50 text-center border-2 border-[#0E141D] bg-[#0D1117] backdrop-blur-md">
           <div className="bg-[#0D1117] border-t-2 border-[#212830] rounded-lg shadow-md p-6 max-w-md mx-auto mb-4">
             <p className="text-lg text-white">
               Selected: {format(selectedDate, 'EEEE, MMMM d')} at {selectedTime}
@@ -145,6 +145,7 @@ const Calendar: React.FC = () => {
     </div>
    
      </div>
+     <NavBar/>
       </>
   );
  

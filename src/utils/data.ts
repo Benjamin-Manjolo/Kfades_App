@@ -70,11 +70,11 @@ export const mockServices: Service[] = [
 
 export const NavbarItems: NavBarItem[] = [
   {
-    label: 'Notifications',
+    label: '',
     explore: '/',
   },
   {
-    label: 'Explore',
+    label: '',
     explore: '/barber-inspo',
   },
    ]

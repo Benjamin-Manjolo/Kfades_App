@@ -1,7 +1,6 @@
 -- Create bookings table in Supabase
 CREATE TABLE IF NOT EXISTS bookings (
   id SERIAL PRIMARY KEY,
-  booking_id VARCHAR(255) UNIQUE NOT NULL,
   service_name VARCHAR(255) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   date DATE NOT NULL,

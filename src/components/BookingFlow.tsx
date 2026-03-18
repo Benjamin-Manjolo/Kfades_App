@@ -19,6 +19,7 @@ const BookingFlow: React.FC = () => {
     specialRequests: '',
   });
 
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -93,7 +94,7 @@ const BookingFlow: React.FC = () => {
   const handleFinish = async () => {
     // Mock booking creation
     const newBooking: Booking = {
-      id: Date.now().toString(),
+      id: generateTxRef(),
       serviceId: selectedService!.id,
       date: bookingData!.date,
       time: bookingData!.time,
@@ -406,6 +407,7 @@ const BookingFlow: React.FC = () => {
         </button>
       </div>
     </div>
+    <NavBar/>
     </>
     
    

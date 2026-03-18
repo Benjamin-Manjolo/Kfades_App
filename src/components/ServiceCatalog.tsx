@@ -110,6 +110,7 @@ const ServiceCatalog: React.FC = () => {
    
     </div>
     </div>
+     <NavBar/>
     </>
   );
 };
