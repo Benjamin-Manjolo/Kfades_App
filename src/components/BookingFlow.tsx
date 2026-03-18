@@ -22,7 +22,7 @@ const BookingFlow: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+
 
   const generateTxRef = () => {
     const timestamp = Date.now();
@@ -142,7 +142,7 @@ const BookingFlow: React.FC = () => {
    
 
    
-    {}
+   
     console.log('New booking:', newBooking);
     alert('Booking confirmed! You will receive a confirmation SMS/WhatsApp.');
 
@@ -385,7 +385,7 @@ const BookingFlow: React.FC = () => {
         {renderStepContent(activeStep)}
       </div>
 
-      <div className="flex justify-between backdrop-blur-sm ">
+      <div className="flex justify-between backdrop-blur-sm mb-24">
         <button
           onClick={handleBack}
           disabled={activeStep === 0}
