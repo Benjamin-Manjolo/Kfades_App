@@ -132,7 +132,7 @@ const BookingFlow: React.FC = () => {
     } catch {
       addToast('error', 'Data Error', 'Failed to load your saved session. Please start over.');
     }
-  }, []);
+  }, [addToast]);
 
   // ── Navigation ──
   const handleNext = () => {
