@@ -2,7 +2,7 @@
  * Payment Service - API calls for Paychangu payments
  */
 
-const PAYCHANGU_BASE_URL = 'http://localhost:3001/paychangu';
+const PAYCHANGU_BASE_URL = 'https://kfades.onrender.com/paychangu';
 
 export interface PaymentInitData {
   amount: number;

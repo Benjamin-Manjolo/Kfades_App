@@ -167,7 +167,7 @@ const BookingFlow: React.FC = () => {
         last_name: 'customer',
         email: 'customer@email.com',
         callback_url: 'https://kfades.onrender.com/paychangu/callback',
-        return_url: 'http://localhost:3000/checkout',
+        return_url: 'https://kfades.vercel.app/checkout',
       };
 
       const response = await paymentService.initiateTransaction(paymentData);
