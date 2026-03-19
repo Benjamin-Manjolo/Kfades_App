@@ -38,7 +38,7 @@ export const mockServices: Service[] = [
     id: '3',
     name: 'Haircut & Beard',
     image:images[2],
-    price: 3500,
+    price: 500,
     duration: 45,
     description: 'Complete haircut and beard grooming package',
     popular: true,
