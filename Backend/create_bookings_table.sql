@@ -1,16 +1,16 @@
 -- Create bookings table in Supabase
 CREATE TABLE IF NOT EXISTS bookings (
   id SERIAL PRIMARY KEY,
-  service_name VARCHAR(255) NOT NULL,
-  price DECIMAL(10, 2) NOT NULL,
-  date DATE NOT NULL,
-  time VARCHAR(50) NOT NULL,
-  customer_name VARCHAR(255) NOT NULL,
+  bookingId VARCHAR(255) NOT NULL UNIQUE,
+  serviceId VARCHAR(255) NOT NULL,
+  time DECIMAL(10, 2) NOT NULL,
+  customerName VARCHAR(255) NOT NULL,
   phone VARCHAR(50) NOT NULL,
-  address TEXT NOT NULL,
-  special_requests TEXT,
-  payment_option VARCHAR(50) NOT NULL,
-  status VARCHAR(50) DEFAULT 'pending',
+  address VARCHAR(255) NOT NULL,
+  specialReuests TEXT,
+  paymentOption VARCHAR(50) NOT NULL,
+   status VARCHAR(50) DEFAULT 'pending',
+  totalPrice DECIMAL(10, 2) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

@@ -9,7 +9,7 @@ export interface Service {
 }
 export interface NavBarItem {
   label: string;
-  explore: string;
+  link: string;
 }
 
 

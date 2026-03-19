@@ -1,4 +1,6 @@
 import { Service, NavBarItem } from '../types';
+import { Explore, Notifications } from "@mui/icons-material";
+
 
 
 const images = [
@@ -71,10 +73,10 @@ export const mockServices: Service[] = [
 export const NavbarItems: NavBarItem[] = [
   {
     label: '',
-    explore: '/',
+    link: '/',
   },
   {
     label: '',
-    explore: '/barber-inspo',
+    link: '/barber-inspo',
   },
    ]
