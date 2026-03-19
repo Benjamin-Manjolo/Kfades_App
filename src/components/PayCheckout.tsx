@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./NavBar";
+
 
 const PayCheckout: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ const PayCheckout: React.FC = () => {
         </p>
 
       </div>
-
+    
     </div>
   );
 };
