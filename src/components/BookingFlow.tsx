@@ -166,7 +166,7 @@ const BookingFlow: React.FC = () => {
         first_name: customerInfo.name,
         last_name: 'customer',
         email: 'customer@email.com',
-        callback_url: 'http://localhost:3001/paychangu/callback',
+        callback_url: 'https://kfades.onrender.com/paychangu/callback',
         return_url: 'http://localhost:3000/checkout',
       };
 
@@ -217,7 +217,7 @@ const BookingFlow: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3001/api/bookings', {
+      const response = await fetch('https://kfades.onrender.com/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
