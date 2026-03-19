@@ -75,7 +75,7 @@ const AdminDashboard: React.FC = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/bookings');
+      const response = await fetch('https://kfades.onrender.com/api/bookings');
       const result = await response.json();
       if (result.success && result.rawData) {
         setBookings(result.rawData);
@@ -102,7 +102,7 @@ const AdminDashboard: React.FC = () => {
 
   const updateBookingStatus = async (bookingId: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/bookings/${bookingId}`, {
+      const response = await fetch(`https://kfades.onrender.com/api/bookings/${bookingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
