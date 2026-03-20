@@ -28,26 +28,14 @@ const AdminLogin: React.FC = () => {
   return (
     <>
       {/* Ambient blobs matching app */}
-      <div className="blob blob-pink" />
-      <div className="blob blob-blue" />
-      <div className="blob blob-teal" />
-
+     
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
 
-          {/* Logo / Brand */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate] tracking-wider">
-              KURUPT
-            </h1>
-            <p className="text-sm font-bold tracking-widest text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
-              Barbershop
-            </p>
-            <p className="mt-3 text-xs tracking-[0.25em] uppercase text-gray-500">Admin Portal</p>
-          </div>
-
+        
+        <div className='text-center p-5 text-3xl tracking-wide'>Admin</div>
           {/* Card */}
-          <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg p-6 backdrop-blur-sm shadow-2xl">
+          <div className="bg-white border-2 border-blue rounded-lg p-6 backdrop-blur-sm shadow-2xl">
             <h2 className="text-white text-lg font-semibold text-center mb-6 tracking-wide">
               Sign In
             </h2>
@@ -61,7 +49,7 @@ const AdminLogin: React.FC = () => {
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
+                <label htmlFor="phone" className="block text-sm font-medium text-black mb-1">
                   Phone Number <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -70,13 +58,13 @@ const AdminLogin: React.FC = () => {
                   value={phone}
                   onChange={(e) => { setPhone(e.target.value); setError(''); }}
                   required
-                  className="w-full px-3 py-3 text-sm bg-[#0D1117] border-2 border-blue backdrop-blur-sm font-thin text-white tracking-wide rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
+                  className="w-full px-3 py-3 text-sm bg-white border-2 border-blue backdrop-blur-sm font-thin text-black tracking-wide rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
                   placeholder="Enter phone number"
                 />
               </div>
 
               <div>
-                <label htmlFor="pin" className="block text-sm font-medium text-gray-300 mb-1">
+                <label htmlFor="pin" className="block text-sm font-medium text-black mb-1">
                   PIN <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -86,7 +74,7 @@ const AdminLogin: React.FC = () => {
                   onChange={(e) => { setPin(e.target.value); setError(''); }}
                   required
                   maxLength={6}
-                  className="w-full px-3 py-3 text-sm bg-[#0D1117] border-2 border-blue backdrop-blur-sm font-thin text-white tracking-widest rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
+                  className="w-full px-3 py-3 text-sm bg-white border-2 border-blue backdrop-blur-sm font-thin text-black tracking-widest rounded-md focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
                   placeholder="••••"
                 />
               </div>

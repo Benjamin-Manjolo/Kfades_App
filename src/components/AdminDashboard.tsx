@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,8 +31,8 @@ const STATUS_CONFIG: Record<string, { dot: string; pill: string; label: string }
   pending:   { dot: 'bg-amber-400',  pill: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',  label: 'Pending'   },
   confirmed: { dot: 'bg-blue-400',   pill: 'bg-blue-500/15  text-blue-400  border border-blue-500/30',   label: 'Confirmed' },
   completed: { dot: 'bg-emerald-400',pill: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30', label: 'Completed' },
-  cancelled: { dot: 'bg-red-400',    pill: 'bg-red-500/15   text-red-400   border border-red-500/30',    label: 'Cancelled' },
-  'no-show': { dot: 'bg-gray-500',   pill: 'bg-gray-500/15  text-gray-400  border border-gray-500/30',   label: 'No-show'   },
+  cancelled: { dot: 'bg-red-400',    pill: 'bg-white/15   text-red-400   border border-red-500/30',    label: 'Cancelled' },
+  'no-show': { dot: 'bg-gray-500',   pill: 'bg-gray-500/15  text-black  border border-gray-500/30',   label: 'No-show'   },
 };
 
 const StatusPill: React.FC<{ status: string }> = ({ status }) => {
@@ -45,14 +46,14 @@ const StatusPill: React.FC<{ status: string }> = ({ status }) => {
 };
 
 // ── Stat card ────────────────────────────────────────────────────────────────
-const StatCard: React.FC<{ label: string; value: string | number; accent: string; icon: string }> = ({ label, value, accent, icon }) => (
-  <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg p-5 flex items-center gap-4 backdrop-blur-sm">
-    <div className={`w-10 h-10 rounded-md flex items-center justify-center text-lg ${accent}`}>
+const StatCard: React.FC<{ label: string; value: string | number; accent: string; icon: any }> = ({ label, value, accent, icon }) => (
+  <div className="bg-white rounded-lg p-5 flex items-center gap-4 backdrop-blur-sm">
+    <div className={`w-10 h-10 rounded-md flex items-center justify-center text-md ${accent}`}>
       {icon}
     </div>
     <div>
-      <p className="text-gray-500 text-xs uppercase tracking-widest">{label}</p>
-      <p className="text-white text-2xl font-bold mt-0.5">{value}</p>
+      <p className="text-black text-xs uppercase tracking-widest">{label}</p>
+      <p className="text-black text-2xl font-bold mt-0.5">{value}</p>
     </div>
   </div>
 );
@@ -145,7 +146,7 @@ const AdminDashboard: React.FC = () => {
       <div className="min-h-screen">
 
         {/* ── Header ── */}
-        <header className="bg-[#0D1117] border-b-2 border-[#3D444D] px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
+        <header className="bg-white  px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
            
 
@@ -154,38 +155,38 @@ const AdminDashboard: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setNotifOpen(o => !o)}
-                  className="relative p-2 rounded-md border border-[#3D444D] text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                  className="relative p-2 rounded-md border border-[#3D444D] text-black hover:text-black hover:bg-white/5 transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                    <span className="absolute -top-1 -right-1 bg-white text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
                       {unreadCount}
                     </span>
                   )}
                 </button>
 
                 {notifOpen && (
-                  <div className="absolute right-0 top-12 w-80 bg-[#151B23] border-2 border-[#3D444D] rounded-lg shadow-2xl z-50 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-[#3D444D]">
-                      <p className="text-white text-sm font-semibold">Notifications</p>
+                  <div className="fixed left-0 top-12 w-80 bg-white  shadow-2xl z-50 overflow-hidden">
+                    <div className="px-4 py-3 ">
+                      <p className="text-black text-sm font-semibold">Notifications</p>
                     </div>
                     {notifications.length === 0 ? (
-                      <p className="text-gray-500 text-sm text-center py-6">No notifications</p>
+                      <p className="text-black text-sm text-center py-6">No notifications</p>
                     ) : (
                       notifications.map(n => (
                         <div
                           key={n.id}
                           onClick={() => markNotificationRead(n.id)}
-                          className={`px-4 py-3 border-b border-[#3D444D] cursor-pointer hover:bg-white/5 transition-colors ${n.read ? 'opacity-50' : ''}`}
+                          className={`px-4 py-3  cursor-pointer hover:bg-white/5 transition-colors ${n.read ? 'opacity-50' : ''}`}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <p className="text-white text-xs leading-relaxed">{n.message}</p>
+                            <p className="text-black text-xs leading-relaxed">{n.message}</p>
                             {!n.read && <span className="w-2 h-2 rounded-full bg-blue-400 mt-1 shrink-0" />}
                           </div>
-                          <p className="text-gray-600 text-[10px] mt-1">{n.timestamp}</p>
+                          <p className="text-black text-[10px] mt-1">{n.timestamp}</p>
                         </div>
                       ))
                     )}
@@ -196,7 +197,7 @@ const AdminDashboard: React.FC = () => {
               {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="text-sm text-gray-400 hover:text-red-400 border border-[#3D444D] hover:border-red-500/50 px-4 py-2 rounded-md transition-colors duration-200"
+                className="text-sm text-black hover:text-red-400 border border-[#3D444D] hover:border-red-500/50 px-4 py-2 rounded-md transition-colors duration-200 fixed right-0"
               >
                 Logout
               </button>
@@ -205,7 +206,7 @@ const AdminDashboard: React.FC = () => {
         </header>
 
         {/* ── Tabs ── */}
-        <nav className="bg-[#0D1117]/80 border-b border-[#3D444D] px-6 backdrop-blur-sm">
+        <nav className="bg-white/80  px-6 backdrop-blur-sm">
           <div className="flex gap-0 max-w-7xl mx-auto">
             {TAB_LABELS.map(({ key, label }) => (
               <button
@@ -213,8 +214,8 @@ const AdminDashboard: React.FC = () => {
                 onClick={() => setActiveTab(key)}
                 className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors duration-200 ${
                   activeTab === key
-                    ? 'border-cyan-400 text-cyan-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-300'
+                    ? 'border-black text-black font-bold'
+                    : 'border-transparent text-black hover:font-bold'
                 }`}
               >
                 {label}
@@ -231,32 +232,32 @@ const AdminDashboard: React.FC = () => {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
               </svg>
-              <p className="text-gray-500 text-sm tracking-wide">Loading bookings…</p>
+              <p className="text-black text-sm tracking-wide">Loading bookings…</p>
             </div>
           ) : (
             <>
 
               {/* ── DASHBOARD TAB ── */}
               {activeTab === 'dashboard' && (
-                <div className="space-y-6">
+                <div className="space-y-6 ">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <StatCard label="Total Revenue"    value={`MWK ${totalRevenue.toLocaleString()}`} accent="bg-emerald-500/10 text-emerald-400" icon="💰" />
-                    <StatCard label="Total Bookings"   value={bookings.length}   accent="bg-blue-500/10 text-blue-400"    icon="📋" />
-                    <StatCard label="Pending"          value={pendingBookings}   accent="bg-amber-500/10 text-amber-400"  icon="⏳" />
-                    <StatCard label="Today"            value={todayBookings}     accent="bg-purple-500/10 text-purple-400" icon="📅" />
+                    <StatCard label="Total Revenue"    value={`MWK ${totalRevenue.toLocaleString()}`} accent="bg-black/50" icon="" />
+                    <StatCard label="Total Bookings"   value={bookings.length}   accent="bg-black/50"    icon="" />
+                    <StatCard label="Pending"          value={pendingBookings}   accent="bg-black/50"  icon="" />
+                    <StatCard label="Today"            value={todayBookings}     accent="bg-black/50" icon="" />
                   </div>
 
                   {/* Recent Bookings */}
-                  <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg overflow-hidden backdrop-blur-sm">
-                    <div className="px-5 py-4 border-b border-[#3D444D]">
-                      <h2 className="text-white font-semibold tracking-wide">Recent Bookings</h2>
+                  <div className="bg-white rounded-lg overflow-hidden backdrop-blur-sm">
+                    <div className="px-5 py-4 ">
+                      <h2 className="text-black font-semibold tracking-wide">Recent Bookings</h2>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="bg-[#151B23]">
+                          <tr className="bg-white">
                             {['Customer', 'Service', 'Date & Time', 'Status', 'Price'].map(h => (
-                              <th key={h} className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
+                              <th key={h} className="px-5 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">{h}</th>
                             ))}
                           </tr>
                         </thead>
@@ -264,22 +265,22 @@ const AdminDashboard: React.FC = () => {
                           {bookings.slice(0, 5).map(booking => (
                             <tr key={booking.id} className="hover:bg-white/5 transition-colors">
                               <td className="px-5 py-4">
-                                <p className="text-white font-medium">{booking.customer_name}</p>
-                                <p className="text-gray-500 text-xs">{booking.phone}</p>
+                                <p className="text-black font-medium">{booking.customer_name}</p>
+                                <p className="text-black text-xs">{booking.phone}</p>
                               </td>
-                              <td className="px-5 py-4 text-gray-300">{booking.service_name}</td>
+                              <td className="px-5 py-4 text-black">{booking.service_name}</td>
                               <td className="px-5 py-4">
-                                <p className="text-gray-300">{new Date(booking.date).toLocaleDateString()}</p>
-                                <p className="text-gray-500 text-xs">{booking.time}</p>
+                                <p className="text-black">{new Date(booking.date).toLocaleDateString()}</p>
+                                <p className="text-black text-xs">{booking.time}</p>
                               </td>
                               <td className="px-5 py-4"><StatusPill status={booking.status} /></td>
-                              <td className="px-5 py-4 text-white font-medium">MWK {booking.price}</td>
+                              <td className="px-5 py-4 text-black font-medium">MWK {booking.price}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                       {bookings.length === 0 && (
-                        <p className="text-center text-gray-600 py-10 text-sm">No bookings yet</p>
+                        <p className="text-center text-black py-10 text-sm">No bookings yet</p>
                       )}
                     </div>
                   </div>
@@ -290,60 +291,61 @@ const AdminDashboard: React.FC = () => {
               {activeTab === 'bookings' && (
                 <div className="space-y-4">
                   {/* Filter */}
-                  <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg p-4 backdrop-blur-sm flex items-center gap-4">
-                    <span className="text-gray-400 text-sm">Filter:</span>
-                    <div className="flex gap-2 flex-wrap">
-                      {['all', 'pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(s => (
-                        <button
-                          key={s}
-                          onClick={() => setFilterStatus(s)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium capitalize transition-colors duration-200 ${
-                            filterStatus === s
-                              ? 'bg-gradient-to-r from-black via-[#111] to-[#333] text-white'
-                              : 'border border-[#3D444D] text-gray-400 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+<div className="relative">
+  <select
+    value={filterStatus}
+    onChange={(e) => setFilterStatus(e.target.value)}
+    className="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all duration-200 capitalize"
+   
+    >
+    {['all', 'pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(s => (
+      <option key={s} value={s} className="capitalize">
+        {s.charAt(0).toUpperCase() + s.slice(1)}
+      </option>
+    ))}
+    
+    </select>
+   
+
+  {/* Custom chevron icon */}
+ 
+</div>
 
                   {/* Table */}
-                  <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg overflow-hidden backdrop-blur-sm">
+                  <div className="bg-white rounded-lg overflow-hidden backdrop-blur-sm">
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="bg-[#151B23]">
+                          <tr className="bg-white">
                             {['ID', 'Customer', 'Service', 'Date & Time', 'Address', 'Payment', 'Status', 'Actions'].map(h => (
-                              <th key={h} className="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
+                              <th key={h} className="px-5 py-3 text-left text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap">{h}</th>
                             ))}
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[#3D444D]">
                           {filteredBookings.map(booking => (
                             <tr key={booking.id} className="hover:bg-white/5 transition-colors">
-                              <td className="px-5 py-4 text-gray-600 font-mono text-xs">#{booking.booking_id?.slice(-6)}</td>
+                              <td className="px-5 py-4 text-black font-mono text-xs">#{booking.booking_id?.slice(-6)}</td>
                               <td className="px-5 py-4">
-                                <p className="text-white font-medium">{booking.customer_name}</p>
-                                <p className="text-gray-500 text-xs">{booking.phone}</p>
+                                <p className="text-black font-medium">{booking.customer_name}</p>
+                                <p className="text-black text-xs">{booking.phone}</p>
                               </td>
                               <td className="px-5 py-4">
-                                <p className="text-gray-300">{booking.service_name}</p>
-                                <p className="text-gray-500 text-xs">MWK {booking.price}</p>
+                                <p className="text-black">{booking.service_name}</p>
+                                <p className="text-black text-xs">MWK {booking.price}</p>
                               </td>
                               <td className="px-5 py-4">
-                                <p className="text-gray-300">{new Date(booking.date).toLocaleDateString()}</p>
-                                <p className="text-gray-500 text-xs">{booking.time}</p>
+                                <p className="text-black">{new Date(booking.date).toLocaleDateString()}</p>
+                                <p className="text-black text-xs">{booking.time}</p>
                               </td>
-                              <td className="px-5 py-4 text-gray-500 text-xs max-w-[140px] truncate">{booking.address}</td>
-                              <td className="px-5 py-4 text-gray-400 capitalize text-xs">{booking.payment_option}</td>
+                              <td className="px-5 py-4 text-black text-xs max-w-[140px] truncate">{booking.address}</td>
+                              <td className="px-5 py-4 text-black capitalize text-xs">{booking.payment_option}</td>
                               <td className="px-5 py-4"><StatusPill status={booking.status} /></td>
                               <td className="px-5 py-4">
                                 <select
                                   value={booking.status}
                                   onChange={(e) => updateBookingStatus(booking.booking_id, e.target.value)}
-                                  className="bg-[#151B23] border border-[#3D444D] text-gray-300 text-xs rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors"
+                                  className="bg-white border border-[#3D444D] text-black text-xs rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors"
                                 >
                                   <option value="pending">Pending</option>
                                   <option value="confirmed">Confirmed</option>
@@ -358,7 +360,7 @@ const AdminDashboard: React.FC = () => {
                       </table>
                     </div>
                     {filteredBookings.length === 0 && (
-                      <p className="text-center text-gray-600 py-10 text-sm">No bookings found</p>
+                      <p className="text-center text-black py-10 text-sm">No bookings found</p>
                     )}
                   </div>
                 </div>
@@ -370,35 +372,35 @@ const AdminDashboard: React.FC = () => {
                   {/* Top row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { label: 'Total Revenue', value: `MWK ${totalRevenue.toLocaleString()}`, sub: `From ${bookings.length} bookings`, accent: 'border-emerald-500/30 bg-emerald-500/5' },
-                      { label: 'Completed',     value: completedBookings,                      sub: `${bookings.length > 0 ? Math.round((completedBookings / bookings.length) * 100) : 0}% completion rate`, accent: 'border-blue-500/30 bg-blue-500/5' },
-                      { label: 'Avg. Booking',  value: `MWK ${bookings.length > 0 ? Math.round(totalRevenue / bookings.length).toLocaleString() : 0}`, sub: 'Per service', accent: 'border-purple-500/30 bg-purple-500/5' },
+                      { label: 'Total Revenue', value: `MWK ${totalRevenue.toLocaleString()}`, sub: `From ${bookings.length} bookings`, accent: ' bg-white border-2-blue' },
+                      { label: 'Completed',     value: completedBookings,                      sub: `${bookings.length > 0 ? Math.round((completedBookings / bookings.length) * 100) : 0}% completion rate`, accent: 'bg-white border-2-blue' },
+                      { label: 'Avg. Booking',  value: `MWK ${bookings.length > 0 ? Math.round(totalRevenue / bookings.length).toLocaleString() : 0}`, sub: 'Per service', accent: 'bg-white border-2-blue' },
                     ].map(card => (
                       <div key={card.label} className={`border-2 rounded-lg p-6 backdrop-blur-sm ${card.accent}`}>
-                        <p className="text-gray-400 text-xs uppercase tracking-widest">{card.label}</p>
-                        <p className="text-white text-3xl font-bold mt-2">{card.value}</p>
-                        <p className="text-gray-500 text-xs mt-1">{card.sub}</p>
+                        <p className="text-black text-xs uppercase tracking-widest">{card.label}</p>
+                        <p className="text-black text-3xl font-bold mt-2">{card.value}</p>
+                        <p className="text-black text-xs mt-1">{card.sub}</p>
                       </div>
                     ))}
                   </div>
 
                   {/* Top Services */}
-                  <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg backdrop-blur-sm overflow-hidden">
-                    <div className="px-5 py-4 border-b border-[#3D444D]">
-                      <h2 className="text-white font-semibold tracking-wide">Top Services</h2>
+                  <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
+                    <div className="px-5 py-4 ">
+                      <h2 className="text-black font-semibold tracking-wide">Top Services</h2>
                     </div>
                     <div className="p-5 space-y-4">
                       {topServices.length === 0 ? (
-                        <p className="text-gray-600 text-sm text-center py-4">No data yet</p>
+                        <p className="text-black text-sm text-center py-4">No data yet</p>
                       ) : topServices.map(([service, count], index) => (
                         <div key={service} className="flex items-center gap-4">
-                          <span className="text-lg font-bold text-gray-600 w-6 text-center">#{index + 1}</span>
+                          <span className="text-md font-bold text-black w-6 text-center">#{index + 1}</span>
                           <div className="flex-1">
                             <div className="flex justify-between mb-1.5">
-                              <span className="text-white text-sm font-medium">{service}</span>
-                              <span className="text-gray-500 text-xs">{count} bookings</span>
+                              <span className="text-black text-sm font-medium">{service}</span>
+                              <span className="text-black text-xs">{count} bookings</span>
                             </div>
-                            <div className="w-full bg-[#151B23] rounded-full h-1.5 border border-[#3D444D]">
+                            <div className="w-full bg-white rounded-full h-1.5 border border-[#3D444D]">
                               <div
                                 className="bg-gradient-to-r from-cyan-600 to-cyan-400 h-1.5 rounded-full transition-all duration-700"
                                 style={{ width: `${(count / bookings.length) * 100}%` }}
@@ -413,9 +415,9 @@ const AdminDashboard: React.FC = () => {
                   {/* Payment Methods & Status side-by-side */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Payment methods */}
-                    <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg backdrop-blur-sm overflow-hidden">
-                      <div className="px-5 py-4 border-b border-[#3D444D]">
-                        <h2 className="text-white font-semibold tracking-wide">Payment Methods</h2>
+                    <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
+                      <div className="px-5 py-4 ">
+                        <h2 className="text-black font-semibold tracking-wide">Payment Methods</h2>
                       </div>
                       <div className="p-5 grid grid-cols-3 gap-3">
                         {Object.entries(
@@ -424,26 +426,26 @@ const AdminDashboard: React.FC = () => {
                             return acc;
                           }, {} as Record<string, number>)
                         ).map(([method, count]) => (
-                          <div key={method} className="bg-[#151B23] border border-[#3D444D] rounded-lg p-3 text-center">
-                            <p className="text-white text-xl font-bold">{count}</p>
-                            <p className="text-gray-400 text-xs capitalize mt-0.5">{method}</p>
-                            <p className="text-gray-600 text-[10px] mt-0.5">{Math.round((count / bookings.length) * 100)}%</p>
+                          <div key={method} className="bg-white border border-[#3D444D] rounded-lg p-3 text-center">
+                            <p className="text-black text-md font-bold">{count}</p>
+                            <p className="text-black text-xs capitalize mt-0.5">{method}</p>
+                            <p className="text-black text-[10px] mt-0.5">{Math.round((count / bookings.length) * 100)}%</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Status distribution */}
-                    <div className="bg-[#0D1117] border-2 border-[#3D444D] rounded-lg backdrop-blur-sm overflow-hidden">
-                      <div className="px-5 py-4 border-b border-[#3D444D]">
-                        <h2 className="text-white font-semibold tracking-wide">Booking Status</h2>
+                    <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
+                      <div className="px-5 py-4 ">
+                        <h2 className="text-black font-semibold tracking-wide">Booking Status</h2>
                       </div>
-                      <div className="p-5 grid grid-cols-3 gap-3">
+                      <div className="p-8 grid grid-cols-2 gap-4">
                         {['pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(status => {
                           const count = bookings.filter(b => b.status === status).length;
                           return (
-                            <div key={status} className="bg-[#151B23] border border-[#3D444D] rounded-lg p-3 text-center">
-                              <p className="text-white text-xl font-bold">{count}</p>
+                            <div key={status} className="bg-white border  rounded-lg p-8 text-center">
+                              <p className="text-black text-md font-bold">{count}</p>
                               <StatusPill status={status} />
                             </div>
                           );
