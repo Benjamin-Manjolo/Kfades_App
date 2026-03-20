@@ -28,25 +28,22 @@ const ServiceCatalog: React.FC = () => {
     <>
     <div className=''>
     
-       <div className="blob blob-pink" />
+       {/* <div className="blob blob-pink" />
         <div className="blob blob-blue" />
-        <div className="blob blob-teal" />
-       <div className='m-0 '>
+        <div className="blob blob-teal" /> */}
+       <div className=' bg-white  '>
+        <div className='font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3 '>
+          Services
+        </div>
      
-       <h1 className="text-[20px] font-semibold  text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
-      KURUPT
-  </h1>
-  <h1 className="text-md font-bold tracking-widest text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
-      Barbershop
-  </h1>
       {/* Sort Controls */}
-      <div className="flex gap-2 mb-6 pt-4 mt-5">
+      <div className="flex gap-2  pt-7 mt-5">
        
         {(['popular', 'price', 'duration'] as const).map((option) => (
           <button
             key={option}
             onClick={() => setSortBy(option)}
-            className={`px-4 py-1 rounded-full text-sm font-medium backdrop-blur-sm capitalize transition-colors duration-200 ${
+            className={`px-4 py-1 rounded-full text-xs font-medium backdrop-blur-sm capitalize transition-colors duration-200 ${
               sortBy === option
                 ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] to-[#333333] shadow-md text-white'
                 : 'bg-white shadow-md text-black hover:bg-white'
@@ -62,7 +59,7 @@ const ServiceCatalog: React.FC = () => {
         {sortedServices.map((service) => (
           <div
             key={service.id}
-            className="break-inside-avoid mb-3 rounded-md bg-gray-500/20 backdrop-blur-sm overflow-hidden"
+            className="break-inside-avoid mb-3  rounded-md bg-gray-500/20 backdrop-blur-sm overflow-hidden"
           >
             {/* Image */}
             {service.image && (
@@ -75,7 +72,7 @@ const ServiceCatalog: React.FC = () => {
              
                 {/* Popular badge */}
                 {service.popular && (
-                  <span className="absolute top-3 right-3 bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] to-[#333333] text-white text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="absolute top-3 right-3 bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] to-[#333333] text-white text-xs font-light px-2 py-1 rounded-full">
                     Popular
                   </span>
                 )}
@@ -86,14 +83,14 @@ const ServiceCatalog: React.FC = () => {
             
             <div className="p-4">
               <div className="flex justify-between items-start mb-1">
-                <h2 className="text-lg font-bold text-black">
+                <h2 className="text-sm font-semibold text-black">
                   {service.name}
                 </h2>
               </div>
-              <p className="text-white mb-2">
+              <p className="text-black text-sm font-regular mb-2">
                 {service.description}
               </p>
-              <p className="font-semibold text-white mb-3">
+              <p className="font-light text-sm text-black mb-3">
                 MWK {service.price} • {service.duration} min
               </p>
               <button

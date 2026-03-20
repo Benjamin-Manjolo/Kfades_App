@@ -6,12 +6,13 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
 
 body {
-  margin: 0;
+  
   font-family: 'IBM Plex Sans', sans-serif;  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
-    background: linear-gradient(135deg, #000000 0%, #1b202f 50%, #8ab7fb 100%);
+    background: white;
+    padding: 20px;
     
 }
 
@@ -36,14 +37,7 @@ code {
   .toggle-on {
     box-shadow: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;}
 
- .scene {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #000000 0%, #1b202f 50%, #8ab7fb 100%);
-    position: relative;
-    overflow: hidden;
-    padding:15px;
-  }
-
+ 
   /* The colorful blobs BEHIND everything */
   .blob {
     position: absolute;

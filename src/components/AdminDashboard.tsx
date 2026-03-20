@@ -140,23 +140,14 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <>
-      <div className="blob blob-pink" />
-      <div className="blob blob-blue" />
-      <div className="blob blob-teal" />
+      
 
       <div className="min-h-screen">
 
         {/* ── Header ── */}
         <header className="bg-[#0D1117] border-b-2 border-[#3D444D] px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
-            <div>
-              <h1 className="text-lg font-semibold text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate] tracking-wider leading-none">
-                KURUPT
-              </h1>
-              <p className="text-[10px] font-bold tracking-[0.3em] text-cyan-400 animate-[neonGlow_1.5s_ease-in-out_infinite_alternate]">
-                Barbershop
-              </p>
-            </div>
+           
 
             <div className="flex items-center gap-3">
               {/* Notification bell */}

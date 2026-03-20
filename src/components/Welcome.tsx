@@ -10,36 +10,24 @@ const Welcome: React.FC = () => {
 
   return (
     <div className="h-screen w-full relative">
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="w-full h-full object-cover"
-      >
-        <source src="/kfades.mp4" type="video/mp4" />
-      </video>
+      
 
-      {/* Dark Gradient Overlay - bottom 60% */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent"
-           style={{ background: 'linear-gradient(to top, black 0%, black 15%, transparent 100%)' }}>
-      </div>
+      
 
       {/* Content - Bottom Left */}
       <div className="absolute bottom-0 left-0 w-full p-6 pb-12 md:pb-16">
         <div className="max-w-lg">
           {/* KFADES - Large Bold Uppercase */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl text-white uppercase ">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl text-black uppercase ">
             KFADES
           </h1>
           
-          {/* Upscale your looks - Medium White Text */}
-          <p className="text-lg md:text-xl text-white">
+          {/* Upscale your looks - Medium black Text */}
+          <p className="text-lg md:text-xl text-black">
             Upscale your looks
           </p>
           
-          {/* come get a cut - Small Italic Light White */}
+          {/* come get a cut - Small Italic Light black */}
           <p className="text-sm text-gray-300 mb-3">
             come get a cut
           </p>
@@ -47,7 +35,7 @@ const Welcome: React.FC = () => {
           {/* Get Started Button */}
           <button
             onClick={handleGetStarted}
-            className="text-white text-center rounded-xl shadow-md bg-orange-500 p-3"
+            className="text-black text-center rounded-xl shadow-md bg-orange-500 p-3"
           >
             Get Started
           </button>

@@ -29,19 +29,19 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onRemove: (id: string) => void
       return (
         <div
           key={toast.id}
-          className="relative bg-[#1C2333] border border-[#3D444D] rounded-lg overflow-hidden shadow-2xl animate-slide-in"
+          className="relative bg-white  rounded-lg overflow-hidden shadow-md animate-slide-in"
         >
           {/* Colored left bar */}
           <div className={`absolute left-0 top-0 bottom-0 w-1 ${s.bar}`} />
           <div className="pl-4 pr-3 py-3 flex items-start gap-3">
-            <span className={`text-sm font-bold mt-0.5 ${s.label}`}>{s.icon}</span>
+            <span className={`text-xs font-bold mt-0.5 ${s.label}`}>{s.icon}</span>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-semibold">{toast.title}</p>
+              <p className="text-black text-xs font-semibold">{toast.title}</p>
               <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{toast.message}</p>
             </div>
             <button
               onClick={() => onRemove(toast.id)}
-              className="text-gray-500 hover:text-white text-xs mt-0.5 shrink-0 transition-colors"
+              className="text-gray-500 hover:text-black text-xs mt-0.5 shrink-0 transition-colors"
             >
               ✕
             </button>
@@ -82,7 +82,7 @@ const Field: React.FC<{
   children: React.ReactNode;
 }> = ({ id, label, error, children }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-1">
+    <label htmlFor={id} className="block text-xs font-medium text-gray-300 mb-1">
       {label} <span className="text-red-400">*</span>
     </label>
     {children}
@@ -237,11 +237,11 @@ const BookingFlow: React.FC = () => {
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — your booking was noted but not fully saved. We\'ll follow up via SMS.');
+        addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — your booking was noted but not fully saved. We\'ll follow up via xsS.');
         return true; // still continue
       }
 
-      addToast('success', 'Booking Confirmed!', 'You\'ll receive a confirmation SMS/WhatsApp shortly.');
+      addToast('success', 'Booking Confirmed!', 'You\'ll receive a confirmation xsS/WhatsApp shortly.');
       localStorage.removeItem('selectedService');
       localStorage.removeItem('bookingData');
       return true;
@@ -275,10 +275,10 @@ const BookingFlow: React.FC = () => {
 
   // ── Input class helper ──
   const inputClass = (error?: string) =>
-    `w-full px-3 py-3 text-sm neu-inset backdrop-blur-sm font-thin text-white tracking-wide rounded-md focus:outline-none focus:ring-2 transition-all duration-200 ${
+    `w-full px-3 py-3 text-xs neu-inset backdrop-blur-xs font-thin text-black tracking-wide rounded-md focus:outline-none focus:ring-2 transition-all duration-200 ${
       error
-        ? 'border border-red-500 focus:ring-red-500 bg-red-950/10'
-        : 'focus:ring-white bg-[#0D1117]'
+        ? '  focus:ring-red-500 bg-red-950/10'
+        : 'focus:ring-white bg-white'
     }`;
 
   // ── Step content ──
@@ -287,20 +287,20 @@ const BookingFlow: React.FC = () => {
       case 0:
         return (
           <div>
-            <h2 className="text-xl mt-10 text-white tracking-wide bg-black p-3 rounded-md mb-3 text-center">
+            <h2 className="text-md mt-10 text-black tracking-wide bg-white p-3 rounded-md mb-3 text-center">
               Confirm Your Service
             </h2>
             {selectedService ? (
-              <div className="bg-[#151B23] rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-bold text-white">{selectedService.name}</h3>
-                <p className="text-white mt-1">{selectedService.description}</p>
-                <p className="text-white text-sm mt-2">
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h3 className="text-md font-bold text-black">{selectedService.name}</h3>
+                <p className="text-black mt-1">{selectedService.description}</p>
+                <p className="text-black text-xs mt-2">
                   ${selectedService.price} • {selectedService.duration} minutes
                 </p>
               </div>
             ) : (
-              <div className="bg-red-950/30 border border-red-500/50 rounded-lg p-4 text-center">
-                <p className="text-red-400 text-sm">⚠ No service selected. Please go back and choose a service.</p>
+              <div className="bg-red-950/30  rounded-lg p-4 text-center">
+                <p className="text-red-400 text-xs">⚠ No service selected. Please go back and choose a service.</p>
               </div>
             )}
           </div>
@@ -309,21 +309,21 @@ const BookingFlow: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-xl mt-4 bg-[#0D1117] border-2 border-[#3B424A] text-white tracking-wide p-3 rounded-md mb-3 text-center">
+            <h2 className="text-md mt-4 bg-white text-black tracking-wide p-3 rounded-md mb-3 text-center">
               Confirm Date & Time
             </h2>
             {bookingData ? (
-              <div className="bg-[#0D1117] border-t-2 border-b-2 border-[#3B424A] rounded-lg shadow-md p-4">
-                <p className="text-white">
+              <div className="bg-white  rounded-lg shadow-md p-4">
+                <p className="text-black">
                   Date: {new Date(bookingData.date).toLocaleDateString('en-US', {
                     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
                   })}
                 </p>
-                <p className="text-white mt-1">Time: {bookingData.time}</p>
+                <p className="text-black mt-1">Time: {bookingData.time}</p>
               </div>
             ) : (
-              <div className="bg-amber-950/30 border border-amber-500/50 rounded-lg p-4 text-center">
-                <p className="text-amber-400 text-sm">⚠ No date/time selected. Please go back to choose a slot.</p>
+              <div className="bg-amber-950/30   rounded-lg p-4 text-center">
+                <p className="text-amber-400 text-xs">⚠ No date/time selected. Please go back to choose a slot.</p>
               </div>
             )}
           </div>
@@ -332,8 +332,8 @@ const BookingFlow: React.FC = () => {
       case 2:
         return (
           <div>
-            <h2 className="text-xl font-semibold text-white mb-4">Your Information</h2>
-            <div className="grid grid-cols-1 bg-[#0D1117] md:grid-cols-2 gap-4">
+            <h2 className="text-md font-semibold text-black mb-4">Your Information</h2>
+            <div className="grid grid-cols-1 bg-white md:grid-cols-2 gap-4">
               <Field id="name" label="Full Name" error={validationErrors.name}>
                 <input
                   id="name"
@@ -384,24 +384,24 @@ const BookingFlow: React.FC = () => {
       case 3:
         return (
           <div>
-            <h2 className="text-xl border-2 rounded-md border-[#3B424A] p-3 text-white mb-4">
+            <h2 className="text-md -2 rounded-md -[#3B424A] p-3 text-black mb-4">
               Summary & Payment
             </h2>
-            <div className="bg-[#151B23] border-2 rounded-md border-[#3B424A] shadow-md p-6 mb-6">
-              <h3 className="text-lg font-semibold text-white mb-3">Booking Details</h3>
-              <p className="text-white">Service: {selectedService?.name}</p>
-              <p className="text-white">Date: {bookingData && new Date(bookingData.date).toLocaleDateString()}</p>
-              <p className="text-white">Time: {bookingData?.time}</p>
-              <p className="text-white">Name: {customerInfo.name}</p>
-              <p className="text-white">Phone: {customerInfo.phone}</p>
-              <p className="text-white">Location: {customerInfo.address}</p>
+            <div className="bg-white -2 rounded-md -[#3B424A] shadow-md p-6 mb-6">
+              <h3 className="text-lg font-semibold text-black mb-3">Booking Details</h3>
+              <p className="text-black">Service: {selectedService?.name}</p>
+              <p className="text-black">Date: {bookingData && new Date(bookingData.date).toLocaleDateString()}</p>
+              <p className="text-black">Time: {bookingData?.time}</p>
+              <p className="text-black">Name: {customerInfo.name}</p>
+              <p className="text-black">Phone: {customerInfo.phone}</p>
+              <p className="text-black">Location: {customerInfo.address}</p>
               {customerInfo.specialRequests && (
-                <p className="text-white">Notes: {customerInfo.specialRequests}</p>
+                <p className="text-black">Notes: {customerInfo.specialRequests}</p>
               )}
-              <p className="text-xl font-bold text-white mt-4">Total: ${selectedService?.price}</p>
+              <p className="text-md font-bold text-black mt-4">Total: ${selectedService?.price}</p>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mb-3">Payment Option</h3>
+            <h3 className="text-lg font-semibold text-black mb-3">Payment Option</h3>
             <div className="space-y-2">
               {[
                 {
@@ -412,7 +412,7 @@ const BookingFlow: React.FC = () => {
                 {
                   value: 'full',
                   label: `Full Payment ($${selectedService?.price})`,
-                  badge: 'Coming Soon',
+                  badge: null,
                 },
                 {
                   value: 'cash',
@@ -422,10 +422,10 @@ const BookingFlow: React.FC = () => {
               ].map(({ value, label, badge }) => (
                 <label
                   key={value}
-                  className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors duration-150 ${
+                  className={`flex items-center space-x-3 p-3  rounded-lg cursor-pointer transition-colors duration-150 ${
                     paymentOption === value
-                      ? 'border-white/40 bg-white/5'
-                      : 'border-[#3B424A] hover:bg-white/5'
+                      ? ' bg-white/5'
+                      : 'hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -436,10 +436,10 @@ const BookingFlow: React.FC = () => {
                     onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
                     className="w-4 h-4"
                   />
-                  <span className="text-white text-sm flex items-center gap-2 flex-wrap">
+                  <span className="text-black text-xs flex items-center gap-2 flex-wrap">
                     {label}
                     {badge && (
-                      <span className="bg-red-600 text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                      <span className="bg-red-600 text-black text-xs font-medium px-2 py-0.5 rounded-full">
                         {badge}
                       </span>
                     )}
@@ -457,24 +457,27 @@ const BookingFlow: React.FC = () => {
 
   return (
     <>
+      <div className="font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3">
+          Booking
+        </div>
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
-
+{/* 
       <div className="blob blob-pink" />
       <div className="blob blob-blue" />
-      <div className="blob blob-teal" />
+      <div className="blob blob-teal" /> */}
 
       <div className="">
-        <h1 className="text-xl mt-10 font-bold backdrop-blur-sm text-white tracking-wide shadow-md bg-[#0D1117] p-6 rounded-md mb-3 text-center">
-          Book Your Appointment
-        </h1>
+        <div className="text-md mt-10 font-bold backdrop-blur-xs text-black tracking-wide  bg-white p-6 rounded-md mb-3 text-center">
+          
+        </div>
 
         {/* Stepper */}
-        <div className="flex items-center justify-between backdrop-blur-sm mb-8 px-4">
+        <div className="flex items-center justify-between backdrop-blur-xs mb-8 px-4">
           {steps.map((label, index) => (
             <React.Fragment key={label}>
               <div className="flex flex-col items-center">
-                <div className={`w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center text-sm font-medium ${
+                <div className={`w-8 h-8 rounded-full backdrop-blur-xs flex items-center justify-center text-xs font-medium ${
                   index < activeStep
                     ? 'bg-green-600 text-white'
                     : index === activeStep
@@ -483,7 +486,7 @@ const BookingFlow: React.FC = () => {
                 }`}>
                   {index < activeStep ? '✓' : index + 1}
                 </div>
-                <span className={`text-xs backdrop-blur-sm mt-1 ${index === activeStep ? 'text-white font-medium' : 'text-gray-500'}`}>
+                <span className={`text-xs backdrop-blur-xs mt-1 ${index === activeStep ? 'text-black font-medium' : 'text-gray-500'}`}>
                   {label}
                 </span>
               </div>
@@ -494,18 +497,18 @@ const BookingFlow: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-[#0D1117] backdrop-blur-sm m-1 border-2 border-[#3D444D] rounded-lg p-6 mb-6">
+        <div className="bg-white backdrop-blur-xs m-1 -2 -[#3D444D] rounded-lg p-6 mb-6">
           {renderStepContent(activeStep)}
         </div>
 
-        <div className="flex justify-between backdrop-blur-sm mb-24">
+        <div className="flex justify-between backdrop-blur-xs mb-24">
           <button
             onClick={handleBack}
             disabled={activeStep === 0 || isLoading}
-            className={`px-6 py-2 rounded-md font-medium backdrop-blur-sm transition-colors duration-200 ${
+            className={`px-6 py-2 rounded-md font-medium backdrop-blur-xs transition-colors duration-200 ${
               activeStep === 0 || isLoading
                 ? 'text-gray-600 cursor-not-allowed'
-                : 'text-white hover:bg-white/10'
+                : 'text-black hover:bg-white/10'
             }`}
           >
             Back
@@ -514,11 +517,11 @@ const BookingFlow: React.FC = () => {
           <button
             onClick={activeStep === steps.length - 1 ? handleConfirmBooking : handleNext}
             disabled={isLoading}
-            className="bg-gradient-to-r from-[#000000] via-[#111111] to-[#333333] text-white font-semibold py-2 px-6 rounded-md transition-all backdrop-blur-sm duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-w-[140px] justify-center"
+            className="bg-gradient-to-r from-[#000000] via-[#111111] to-[#333333] text-white font-semibold py-2 px-6 rounded-md transition-all backdrop-blur-xs duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-w-[140px] justify-center"
           >
             {isLoading ? (
               <>
-                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                 </svg>
