@@ -1,49 +1,168 @@
-import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
+
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
+
+  const images = [
+    '1.png', '3.png', '4.png', '5.png',
+    '6.png', '7.png', '8.png', '9.png', '10.png'
+  ];
+
+  const leftImages = images.filter((_, i) => i % 2 === 0);
+  const rightImages = images.filter((_, i) => i % 2 !== 0);
 
   const handleGetStarted = () => {
     navigate('/services');
   };
 
   return (
-    <div className="h-screen w-full relative">
+    <>
+ 
+      
+      <div
+        className="welcome-root bg-white min-h-screen overflow-hidden relative"
+        
+      >
+         
       
 
-      
-
-      {/* Content - Bottom Left */}
-      <div className="absolute bottom-0 left-0 w-full p-6 pb-12 md:pb-16">
-        <div className="max-w-lg">
-          {/* KFADES - Large Bold Uppercase */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl text-black uppercase ">
-            KFADES
-          </h1>
-          
-          {/* Upscale your looks - Medium black Text */}
-          <p className="text-lg md:text-xl text-black">
-            Upscale your looks
-          </p>
-          
-          {/* come get a cut - Small Italic Light black */}
-          <p className="text-sm text-gray-300 mb-3">
-            come get a cut
-          </p>
-
-          {/* Get Started Button */}
-          <button
-            onClick={handleGetStarted}
-            className="text-black text-center rounded-xl shadow-md bg-orange-500 p-3"
+        {/* ── Scrolling columns background ── */}
+        <div
+          className="columns-reveal absolute inset-0 opacity-0"
+          style={{
+            perspective: '1000px',
+            perspectiveOrigin: '50% 38%',
+            zIndex: 0,
+          }}
+        >
+          <div
+            style={{
+              transform: 'rotateX(22deg)',
+              transformStyle: 'preserve-3d',
+              display: 'flex',
+              gap: '10px',
+              height: '130%',
+              marginTop: '-5%',
+              padding: '0 6px',
+            }}
           >
-            Get Started
-          </button>
+            {/* LEFT — scrolls down */}
+            <div
+              className="scroll-col"
+              style={{
+                flex: 1,
+                overflow: 'hidden',
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 18%, black 78%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 18%, black 78%, transparent 100%)',
+              }}
+            >
+              <div className="animate-scroll-down flex flex-col gap-2">
+                {[...leftImages, ...leftImages].map((image, index) => (
+                  <div key={index} style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                    <img
+                      src={`/Barber-Inspo/${image}`}
+                      alt={`cut-${index}`}
+                      style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT — scrolls up */}
+            <div
+              className="scroll-col"
+              style={{
+                flex: 1,
+                overflow: 'hidden',
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 18%, black 78%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 18%, black 78%, transparent 100%)',
+              }}
+            >
+              <div className="animate-scroll-up flex flex-col gap-2">
+                {[...rightImages, ...rightImages].map((image, index) => (
+                  <div key={index} style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                    <img
+                      src={`/Barber-Inspo/${image}`}
+                      alt={`cut-${index}`}
+                      style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Dark overlay over columns */}
+          <div className="" />
+        </div>
+
+        {/* ── Hero content ── */}
+        <div
+          className="fixed bottom-0  flex flex-col items-center rounded-xl justify-center min-h-[20%] bg-white/10 backdrop-blur-sm px-6 text-center"
+          style={{ zIndex: 2, paddingTop: '80px', paddingBottom: '0px' }}
+        >
+
+          {/* Eyebrow */}
+          <div className="hero-eyebrow flex items-center gap-2 mb-5 opacity-0">
+            <div className="divider-line" style={{ width: '24px' }} />
+            <span style={{ fontSize: '11px', letterSpacing: '0.18em', color: 'black', fontWeight: 500, textTransform: 'uppercase' }}>
+              The Barber's Business Partner
+            </span>
+            <div className="divider-line" style={{ width: '24px' }} />
+          </div>
+
+        
+
+          {/* Sub */}
+          <p
+            className="hero-sub opacity-0 mb-8"
+            style={{
+              fontSize: '14px',
+              lineHeight: '1.75',
+              color: 'rgba(0, 0, 0, 0.55)',
+          
+              fontWeight: 300,
+            }}
+          >
+            Leading provider of online booking barbershop, salons
+            and flexible services — all in one place.
+          </p>
+
+          {/* CTA */}
+          <div className="hero-cta opacity-0 mb-8">
+            <button className="bg-black p-3 rounded-2xl text-white" onClick={handleGetStarted}>
+              Get Started →
+            </button>
+          </div>
+
+         
+
+          {/* Stats row */}
+          <div
+            className="hero-pills opacity-0 flex gap-3 w-full"
+            style={{ maxWidth: '340px', animationDelay: '0.85s' }}
+          >
+            <div className="stat-card">
+              <p style={{ fontSize: '22px', fontWeight: 700, color: 'black', fontFamily: 'Playfair Display, serif', margin: 0 }}>10k+</p>
+              <p style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.45)', margin: '3px 0 0', letterSpacing: '0.05em' }}>Clients</p>
+            </div>
+            <div className="stat-card">
+              <p style={{ fontSize: '22px', fontWeight: 700, color: 'black', fontFamily: 'Playfair Display, serif', margin: 0 }}>99.9%</p>
+              <p style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.45)', margin: '3px 0 0', letterSpacing: '0.05em' }}>Uptime</p>
+            </div>
+            <div className="stat-card">
+              <p style={{ fontSize: '22px', fontWeight: 700, color: 'black', fontFamily: 'Playfair Display, serif', margin: 0 }}>24/7</p>
+              <p style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.45)', margin: '3px 0 0', letterSpacing: '0.05em' }}>Support</p>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Welcome;
-
