@@ -8,6 +8,7 @@ import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import BarberInspo from './components/BarberInspo';
 import PayCheckout from './components/PayCheckout';
+import UpcomingAppointments from './components/UpcomingAppointment';
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/checkout" element={<PayCheckout />} />
-        <Route path="/barber-inspo" element={<BarberInspo />} />
+        <Route path="/barber-inspo" element={<BarberInspo />}/>
+        <Route path="/appointment" element={<UpcomingAppointments />} /> 
       </Routes>
     </Router>
   );
