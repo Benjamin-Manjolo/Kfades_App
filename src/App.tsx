@@ -22,7 +22,8 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/checkout" element={<PayCheckout />} />
         <Route path="/barber-inspo" element={<BarberInspo />}/>
-        <Route path="/appointment" element={<UpcomingAppointments />} /> 
+        <Route path="/appointment" element={<UpcomingAppointments />} />     
+        
       </Routes>
     </Router>
   );

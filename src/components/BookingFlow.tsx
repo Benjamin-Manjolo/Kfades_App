@@ -27,11 +27,7 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onRemove: (id: string) => void
     {toasts.map((toast) => {
       const s = toastStyles[toast.type];
       return (
-        <div
-          key={toast.id}
-          className="relative bg-white  rounded-lg overflow-hidden shadow-md animate-slide-in"
-        >
-          {/* Colored left bar */}
+        <div key={toast.id} className="relative bg-white rounded-lg overflow-hidden shadow-md animate-slide-in">
           <div className={`absolute left-0 top-0 bottom-0 w-1 ${s.bar}`} />
           <div className="pl-4 pr-3 py-3 flex items-start gap-3">
             <span className={`text-xs font-bold mt-0.5 ${s.label}`}>{s.icon}</span>
@@ -39,12 +35,7 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onRemove: (id: string) => void
               <p className="text-black text-xs font-semibold">{toast.title}</p>
               <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{toast.message}</p>
             </div>
-            <button
-              onClick={() => onRemove(toast.id)}
-              className="text-gray-500 hover:text-black text-xs mt-0.5 shrink-0 transition-colors"
-            >
-              ✕
-            </button>
+            <button onClick={() => onRemove(toast.id)} className="text-gray-500 hover:text-black text-xs mt-0.5 shrink-0 transition-colors">✕</button>
           </div>
         </div>
       );
@@ -64,23 +55,15 @@ function validateCustomerInfo(info: { name: string; phone: string; address: stri
   const errors: ValidationErrors = {};
   if (!info.name.trim()) errors.name = 'Full name is required';
   else if (info.name.trim().length < 2) errors.name = 'Name must be at least 2 characters';
-
   if (!info.phone.trim()) errors.phone = 'Phone number is required';
   else if (!/^[+\d\s\-()]{7,15}$/.test(info.phone.trim())) errors.phone = 'Enter a valid phone number';
-
   if (!info.address.trim()) errors.address = 'Location / place is required';
-
   return errors;
 }
 
 // ─── Field Input ──────────────────────────────────────────────────────────────
 
-const Field: React.FC<{
-  id: string;
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}> = ({ id, label, error, children }) => (
+const Field: React.FC<{ id: string; label: string; error?: string; children: React.ReactNode }> = ({ id, label, error, children }) => (
   <div>
     <label htmlFor={id} className="block text-xs font-medium text-gray-300 mb-1">
       {label} <span className="text-red-400">*</span>
@@ -93,6 +76,36 @@ const Field: React.FC<{
     )}
   </div>
 );
+
+// ─── localStorage helper ──────────────────────────────────────────────────────
+
+const MY_BOOKINGS_KEY = 'myBookings';
+
+export interface StoredBooking {
+  bookingId: string;
+  serviceName: string;
+  date: string;
+  time: string;
+  customerName: string;
+  phone: string;
+  address: string;
+  paymentOption: string;
+  totalPrice: number;
+  status: string;
+  bookedAt: string; // ISO timestamp when they booked on this device
+}
+
+function saveBookingLocally(booking: StoredBooking) {
+  try {
+    const existing: StoredBooking[] = JSON.parse(localStorage.getItem(MY_BOOKINGS_KEY) || '[]');
+    // avoid duplicates
+    const deduped = existing.filter(b => b.bookingId !== booking.bookingId);
+    deduped.unshift(booking); // newest first
+    localStorage.setItem(MY_BOOKINGS_KEY, JSON.stringify(deduped));
+  } catch {
+    // silently fail — don't block the booking
+  }
+}
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -109,7 +122,6 @@ const BookingFlow: React.FC = () => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const navigate = useNavigate();
 
-  // ── Toast helpers ──
   const addToast = useCallback((type: ToastType, title: string, message: string) => {
     const id = `${Date.now()}_${Math.random()}`;
     setToasts(prev => [...prev, { id, type, title, message }]);
@@ -122,7 +134,6 @@ const BookingFlow: React.FC = () => {
 
   const generateTxRef = () => `TX_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
-  // ── Load from localStorage ──
   useEffect(() => {
     try {
       const serviceData = localStorage.getItem('selectedService');
@@ -134,9 +145,7 @@ const BookingFlow: React.FC = () => {
     }
   }, [addToast]);
 
-  // ── Navigation ──
   const handleNext = () => {
-    // Validate step 2 (Info) before proceeding
     if (activeStep === 2) {
       const errors = validateCustomerInfo(customerInfo);
       if (Object.keys(errors).length > 0) {
@@ -151,13 +160,11 @@ const BookingFlow: React.FC = () => {
 
   const handleBack = () => setActiveStep(prev => prev - 1);
 
-  // ── Payment ──
   const handlePay = async () => {
     if (!selectedService) {
       addToast('error', 'No Service Selected', 'Please go back and select a service.');
       return;
     }
-
     setIsLoading(true);
     try {
       const paymentData: PaymentInitData = {
@@ -169,14 +176,11 @@ const BookingFlow: React.FC = () => {
         callback_url: 'https://kfades.onrender.com/paychangu/callback',
         return_url: 'https://kfades.vercel.app/checkout',
       };
-
       const response = await paymentService.initiateTransaction(paymentData);
-
       if (response.error) {
         addToast('error', 'Payment Failed', response.message || 'Unable to process payment. Please try again.');
         return;
       }
-
       if (response.data?.data?.checkout_url) {
         addToast('success', 'Redirecting', 'Taking you to the secure payment page...');
         setTimeout(() => { window.location.href = response.data.data.checkout_url; }, 800);
@@ -184,7 +188,6 @@ const BookingFlow: React.FC = () => {
         addToast('error', 'Payment Error', 'No checkout URL received. Please contact support.');
       }
     } catch (err: any) {
-      console.error('Payment error:', err);
       if (err?.message?.includes('Network') || err?.message?.includes('fetch')) {
         addToast('error', 'Connection Error', 'Check your internet connection and try again.');
       } else {
@@ -202,8 +205,10 @@ const BookingFlow: React.FC = () => {
       return false;
     }
 
+    const bookingId = generateTxRef();
+
     const newBooking: Booking = {
-      id: generateTxRef(),
+      id: bookingId,
       serviceId: selectedService.id,
       date: bookingData.date,
       time: bookingData.time,
@@ -215,6 +220,22 @@ const BookingFlow: React.FC = () => {
       status: 'pending',
       totalPrice: selectedService.price,
     };
+
+    // ── Persist booking to this device immediately so UpcomingAppointments can track it ──
+    const storedBooking: StoredBooking = {
+      bookingId,
+      serviceName: selectedService.name,
+      date: bookingData.date,
+      time: bookingData.time,
+      customerName: customerInfo.name,
+      phone: customerInfo.phone,
+      address: customerInfo.address,
+      paymentOption,
+      totalPrice: selectedService.price,
+      status: 'pending',
+      bookedAt: new Date().toISOString(),
+    };
+    saveBookingLocally(storedBooking);
 
     try {
       const response = await fetch('https://kfades.onrender.com/api/bookings', {
@@ -237,19 +258,18 @@ const BookingFlow: React.FC = () => {
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — your booking was noted but not fully saved. We\'ll follow up via xsS.');
-        return true; // still continue
+        addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — your booking was noted locally.');
+        return true;
       }
 
-      addToast('success', 'Booking Confirmed!', 'You\'ll receive a confirmation xsS/WhatsApp shortly.');
+      addToast('success', 'Booking Confirmed!', 'Check your activity tab to track your appointment.');
       localStorage.removeItem('selectedService');
       localStorage.removeItem('bookingData');
       return true;
     } catch (err: any) {
-      console.error('Booking save error:', err);
       if (err?.message?.includes('Failed to fetch')) {
-        addToast('warning', 'Offline Mode', 'Could not reach server. Your booking details are saved locally.');
-        return true; // let them proceed
+        addToast('warning', 'Offline Mode', 'Could not reach server. Your booking is saved locally.');
+        return true;
       }
       addToast('error', 'Booking Failed', 'Unable to save your booking. Please try again or call us directly.');
       return false;
@@ -261,45 +281,35 @@ const BookingFlow: React.FC = () => {
     try {
       const saved = await handleFinish();
       if (!saved) return;
-
       if (paymentOption === 'cash') {
         navigate('/checkout');
         return;
       }
-
       await handlePay();
     } finally {
       setIsLoading(false);
     }
   };
 
-  // ── Input class helper ──
   const inputClass = (error?: string) =>
     `w-full px-3 py-3 text-xs neu-inset backdrop-blur-xs font-thin text-black tracking-wide rounded-md focus:outline-none focus:ring-2 transition-all duration-200 ${
-      error
-        ? '  focus:ring-red-500 bg-red-950/10'
-        : 'focus:ring-white bg-white'
+      error ? 'focus:ring-red-500 bg-red-950/10' : 'focus:ring-white bg-white'
     }`;
 
-  // ── Step content ──
   const renderStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
           <div>
-            <h2 className="text-md mt-10 text-black tracking-wide bg-white p-3 rounded-md mb-3 text-center">
-              Confirm Your Service
-            </h2>
+            <h2 className="text-md mt-10 text-black tracking-wide bg-white p-3 rounded-md mb-3 text-center">Confirm Your Service</h2>
             {selectedService ? (
               <div className="bg-white rounded-lg shadow-md p-4">
                 <h3 className="text-md font-bold text-black">{selectedService.name}</h3>
                 <p className="text-black mt-1">{selectedService.description}</p>
-                <p className="text-black text-xs mt-2">
-                  ${selectedService.price} • {selectedService.duration} minutes
-                </p>
+                <p className="text-black text-xs mt-2">MWK {selectedService.price} • {selectedService.duration} minutes</p>
               </div>
             ) : (
-              <div className="bg-red-950/30  rounded-lg p-4 text-center">
+              <div className="bg-red-950/30 rounded-lg p-4 text-center">
                 <p className="text-red-400 text-xs">⚠ No service selected. Please go back and choose a service.</p>
               </div>
             )}
@@ -309,20 +319,14 @@ const BookingFlow: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-md mt-4 bg-white text-black tracking-wide p-3 rounded-md mb-3 text-center">
-              Confirm Date & Time
-            </h2>
+            <h2 className="text-md mt-4 bg-white text-black tracking-wide p-3 rounded-md mb-3 text-center">Confirm Date & Time</h2>
             {bookingData ? (
-              <div className="bg-white  rounded-lg shadow-md p-4">
-                <p className="text-black">
-                  Date: {new Date(bookingData.date).toLocaleDateString('en-US', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                  })}
-                </p>
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <p className="text-black">Date: {new Date(bookingData.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <p className="text-black mt-1">Time: {bookingData.time}</p>
               </div>
             ) : (
-              <div className="bg-amber-950/30   rounded-lg p-4 text-center">
+              <div className="bg-amber-950/30 rounded-lg p-4 text-center">
                 <p className="text-amber-400 text-xs">⚠ No date/time selected. Please go back to choose a slot.</p>
               </div>
             )}
@@ -335,46 +339,20 @@ const BookingFlow: React.FC = () => {
             <h2 className="text-md font-semibold text-black mb-4">Your Information</h2>
             <div className="grid grid-cols-1 bg-white md:grid-cols-2 gap-4">
               <Field id="name" label="Full Name" error={validationErrors.name}>
-                <input
-                  id="name"
-                  type="text"
-                  value={customerInfo.name}
-                  onChange={(e) => {
-                    setCustomerInfo({ ...customerInfo, name: e.target.value });
-                    if (validationErrors.name) setValidationErrors(v => ({ ...v, name: undefined }));
-                  }}
-                  className={inputClass(validationErrors.name)}
-                  placeholder="Enter your full name"
-                />
+                <input id="name" type="text" value={customerInfo.name}
+                  onChange={(e) => { setCustomerInfo({ ...customerInfo, name: e.target.value }); if (validationErrors.name) setValidationErrors(v => ({ ...v, name: undefined })); }}
+                  className={inputClass(validationErrors.name)} placeholder="Enter your full name" />
               </Field>
-
               <Field id="phone" label="Phone Number" error={validationErrors.phone}>
-                <input
-                  id="phone"
-                  type="tel"
-                  value={customerInfo.phone}
-                  onChange={(e) => {
-                    setCustomerInfo({ ...customerInfo, phone: e.target.value });
-                    if (validationErrors.phone) setValidationErrors(v => ({ ...v, phone: undefined }));
-                  }}
-                  className={inputClass(validationErrors.phone)}
-                  placeholder="e.g. +265 999 000 111"
-                />
+                <input id="phone" type="tel" value={customerInfo.phone}
+                  onChange={(e) => { setCustomerInfo({ ...customerInfo, phone: e.target.value }); if (validationErrors.phone) setValidationErrors(v => ({ ...v, phone: undefined })); }}
+                  className={inputClass(validationErrors.phone)} placeholder="e.g. +265 999 000 111" />
               </Field>
-
               <div className="md:col-span-2">
                 <Field id="address" label="Place / Location" error={validationErrors.address}>
-                  <textarea
-                    id="address"
-                    value={customerInfo.address}
-                    onChange={(e) => {
-                      setCustomerInfo({ ...customerInfo, address: e.target.value });
-                      if (validationErrors.address) setValidationErrors(v => ({ ...v, address: undefined }));
-                    }}
-                    rows={2}
-                    className={inputClass(validationErrors.address)}
-                    placeholder="Where should we come?"
-                  />
+                  <textarea id="address" value={customerInfo.address}
+                    onChange={(e) => { setCustomerInfo({ ...customerInfo, address: e.target.value }); if (validationErrors.address) setValidationErrors(v => ({ ...v, address: undefined })); }}
+                    rows={2} className={inputClass(validationErrors.address)} placeholder="Where should we come?" />
                 </Field>
               </div>
             </div>
@@ -384,10 +362,8 @@ const BookingFlow: React.FC = () => {
       case 3:
         return (
           <div>
-            <h2 className="text-md -2 rounded-md -[#3B424A] p-3 text-black mb-4">
-              Summary & Payment
-            </h2>
-            <div className="bg-white -2 rounded-md -[#3B424A] shadow-md p-6 mb-6">
+            <h2 className="text-md rounded-md p-3 text-black mb-4">Summary & Payment</h2>
+            <div className="bg-white rounded-md shadow-md p-6 mb-6">
               <h3 className="text-lg font-semibold text-black mb-3">Booking Details</h3>
               <p className="text-black">Service: {selectedService?.name}</p>
               <p className="text-black">Date: {bookingData && new Date(bookingData.date).toLocaleDateString()}</p>
@@ -395,54 +371,22 @@ const BookingFlow: React.FC = () => {
               <p className="text-black">Name: {customerInfo.name}</p>
               <p className="text-black">Phone: {customerInfo.phone}</p>
               <p className="text-black">Location: {customerInfo.address}</p>
-              {customerInfo.specialRequests && (
-                <p className="text-black">Notes: {customerInfo.specialRequests}</p>
-              )}
-              <p className="text-md font-bold text-black mt-4">Total: ${selectedService?.price}</p>
+              {customerInfo.specialRequests && <p className="text-black">Notes: {customerInfo.specialRequests}</p>}
+              <p className="text-md font-bold text-black mt-4">Total: MWK {selectedService?.price}</p>
             </div>
-
             <h3 className="text-lg font-semibold text-black mb-3">Payment Option</h3>
             <div className="space-y-2">
               {[
-                {
-                  value: 'deposit',
-                  label: `Deposit ($${Math.round((selectedService?.price ?? 0) * 0.3)}) — Secures your slot`,
-                  badge: 'Coming Soon',
-                },
-                {
-                  value: 'full',
-                  label: `Full Payment ($${selectedService?.price})`,
-                  badge: null,
-                },
-                {
-                  value: 'cash',
-                  label: 'Cash on Arrival',
-                  badge: null,
-                },
+                { value: 'deposit', label: `Deposit (MWK ${Math.round((selectedService?.price ?? 0) * 0.3)}) — Secures your slot`, badge: 'Coming Soon' },
+                { value: 'full',    label: `Full Payment (MWK ${selectedService?.price})`, badge: null },
+                { value: 'cash',    label: 'Cash on Arrival', badge: null },
               ].map(({ value, label, badge }) => (
-                <label
-                  key={value}
-                  className={`flex items-center space-x-3 p-3  rounded-lg cursor-pointer transition-colors duration-150 ${
-                    paymentOption === value
-                      ? ' bg-white/5'
-                      : 'hover:bg-white/5'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="payment"
-                    value={value}
-                    checked={paymentOption === value}
-                    onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)}
-                    className="w-4 h-4"
-                  />
+                <label key={value} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 ${paymentOption === value ? 'bg-white/5' : 'hover:bg-white/5'}`}>
+                  <input type="radio" name="payment" value={value} checked={paymentOption === value}
+                    onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)} className="w-4 h-4" />
                   <span className="text-black text-xs flex items-center gap-2 flex-wrap">
                     {label}
-                    {badge && (
-                      <span className="bg-red-600 text-black text-xs font-medium px-2 py-0.5 rounded-full">
-                        {badge}
-                      </span>
-                    )}
+                    {badge && <span className="bg-red-600 text-black text-xs font-medium px-2 py-0.5 rounded-full">{badge}</span>}
                   </span>
                 </label>
               ))}
@@ -457,93 +401,46 @@ const BookingFlow: React.FC = () => {
 
   return (
     <>
-      <div className="font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3">
-          Booking
-        </div>
-      {/* Toast Notifications */}
+      <div className="font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3">Booking</div>
       <ToastContainer toasts={toasts} onRemove={removeToast} />
-{/* 
-      <div className="blob blob-pink" />
-      <div className="blob blob-blue" />
-      <div className="blob blob-teal" /> */}
-
       <div className="">
-        <div className="text-md mt-10 font-bold backdrop-blur-xs text-black tracking-wide  bg-white p-6 rounded-md mb-3 text-center">
-          
-        </div>
-
+        <div className="text-md mt-10 font-bold backdrop-blur-xs text-black tracking-wide bg-white p-6 rounded-md mb-3 text-center" />
         {/* Stepper */}
         <div className="flex items-center justify-between backdrop-blur-xs mb-8 px-4">
           {steps.map((label, index) => (
             <React.Fragment key={label}>
               <div className="flex flex-col items-center">
                 <div className={`w-8 h-8 rounded-full backdrop-blur-xs flex items-center justify-center text-xs font-medium ${
-                  index < activeStep
-                    ? 'bg-green-600 text-white'
-                    : index === activeStep
-                    ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white'
-                    : 'bg-gray-700 text-gray-400'
+                  index < activeStep ? 'bg-green-600 text-white' : index === activeStep ? 'bg-gradient-to-r from-[#000000] via-[#000000] to-[#333333] text-white' : 'bg-gray-700 text-gray-400'
                 }`}>
                   {index < activeStep ? '✓' : index + 1}
                 </div>
-                <span className={`text-xs backdrop-blur-xs mt-1 ${index === activeStep ? 'text-black font-medium' : 'text-gray-500'}`}>
-                  {label}
-                </span>
+                <span className={`text-xs backdrop-blur-xs mt-1 ${index === activeStep ? 'text-black font-medium' : 'text-gray-500'}`}>{label}</span>
               </div>
-              {index < steps.length - 1 && (
-                <div className={`flex-grow h-1 mx-2 ${index < activeStep ? 'bg-green-600' : 'bg-gray-700'}`} />
-              )}
+              {index < steps.length - 1 && <div className={`flex-grow h-1 mx-2 ${index < activeStep ? 'bg-green-600' : 'bg-gray-700'}`} />}
             </React.Fragment>
           ))}
         </div>
-
-        <div className="bg-white backdrop-blur-xs m-1 -2 -[#3D444D] rounded-lg p-6 mb-6">
-          {renderStepContent(activeStep)}
-        </div>
-
+        <div className="bg-white backdrop-blur-xs m-1 rounded-lg p-6 mb-6">{renderStepContent(activeStep)}</div>
         <div className="flex justify-between backdrop-blur-xs mb-24">
-          <button
-            onClick={handleBack}
-            disabled={activeStep === 0 || isLoading}
-            className={`px-6 py-2 rounded-md font-medium backdrop-blur-xs transition-colors duration-200 ${
-              activeStep === 0 || isLoading
-                ? 'text-gray-600 cursor-not-allowed'
-                : 'text-black hover:bg-white/10'
-            }`}
-          >
+          <button onClick={handleBack} disabled={activeStep === 0 || isLoading}
+            className={`px-6 py-2 rounded-md font-medium backdrop-blur-xs transition-colors duration-200 ${activeStep === 0 || isLoading ? 'text-gray-600 cursor-not-allowed' : 'text-black hover:bg-white/10'}`}>
             Back
           </button>
-
-          <button
-            onClick={activeStep === steps.length - 1 ? handleConfirmBooking : handleNext}
-            disabled={isLoading}
-            className="bg-gradient-to-r from-[#000000] via-[#111111] to-[#333333] text-white font-semibold py-2 px-6 rounded-md transition-all backdrop-blur-xs duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-w-[140px] justify-center"
-          >
+          <button onClick={activeStep === steps.length - 1 ? handleConfirmBooking : handleNext} disabled={isLoading}
+            className="bg-gradient-to-r from-[#000000] via-[#111111] to-[#333333] text-white font-semibold py-2 px-6 rounded-md transition-all backdrop-blur-xs duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-w-[140px] justify-center">
             {isLoading ? (
-              <>
-                <svg className="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                </svg>
-                Processing…
-              </>
-            ) : activeStep === steps.length - 1 ? (
-              'Confirm Booking'
-            ) : (
-              'Next'
-            )}
+              <><svg className="animate-spin h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+              </svg>Processing…</>
+            ) : activeStep === steps.length - 1 ? 'Confirm Booking' : 'Next'}
           </button>
         </div>
       </div>
-
       <NavBar />
-
-      {/* Animation styles */}
       <style>{`
-        @keyframes slide-in {
-          from { opacity: 0; transform: translateX(100%); }
-          to   { opacity: 1; transform: translateX(0);    }
-        }
+        @keyframes slide-in { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
         .animate-slide-in { animation: slide-in 0.25s ease-out; }
       `}</style>
     </>
