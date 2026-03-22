@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from './NavBar';
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -344,7 +344,7 @@ const UpcomingAppointments: React.FC = () => {
         )}
       </div>
 
-      <NavBar />
+      
     </>
   );
 };

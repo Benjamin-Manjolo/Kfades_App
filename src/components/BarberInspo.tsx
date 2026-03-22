@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from './NavBar';
+
+
+// ── Style data ────────────────────────────────────────────────────────────────
 
 interface StyleEntry {
   user: string;
@@ -146,15 +148,36 @@ const styleData: StyleEntry[] = [
   },
 ];
 
+const images = [
+  '1.png', '2.png', '3.png', '4.png', '5.png', '6.png',
+  '7.png', '8.png', '9.png', '10.png', '11.png', '12.png',
+  '13.png', '14.png',
+];
+
+// ── Skeleton tile — matches the 3/4 aspect-ratio grid tile ───────────────────
+const GridTileSkeleton: React.FC = () => (
+  <div
+    style={{
+      width: '100%',
+      maxWidth: '140px',
+      aspectRatio: '3/4',
+      borderRadius: '4px',
+      overflow: 'hidden',
+    }}
+    className="skeleton-shimmer"
+  />
+);
+
+// ── Main component ────────────────────────────────────────────────────────────
 const BarberInspo: React.FC = () => {
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const images = [
-    '1.png', '2.png', '3.png', '4.png', '5.png', '6.png',
-    '7.png', '8.png', '9.png', '10.png', '11.png', '12.png',
-    '13.png', '14.png',
-  ];
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 900);
+    return () => clearTimeout(t);
+  }, []);
 
   const current = previewIndex !== null ? styleData[previewIndex] : null;
 
@@ -174,10 +197,23 @@ const BarberInspo: React.FC = () => {
 
   return (
     <>
+      {/* Shimmer keyframe */}
+      <style>{`
+        @keyframes shimmer {
+          0%   { background-position: -400px 0; }
+          100% { background-position:  400px 0; }
+        }
+        .skeleton-shimmer {
+          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+          background-size: 800px 100%;
+          animation: shimmer 1.4s infinite linear;
+        }
+      `}</style>
+
       <div
         className="min-h-screen overflow-hidden"
         style={{
-          backgroundImage: "url('/bgimage.png')",
+          backgroundImage: loading ? 'none' : "url('/bgimage.png')",
           backgroundSize: 'cover',
           backgroundAttachment: 'fixed',
           position: 'relative',
@@ -186,64 +222,84 @@ const BarberInspo: React.FC = () => {
           marginTop: 0,
           padding: 0,
           boxSizing: 'border-box',
+          background: loading ? '#fff' : undefined,
         }}
       >
-        <NavBar />
+       
 
+        {/* Fixed header */}
         <div className="font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3">
           Haircut Inspirations
         </div>
 
-        {/* Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '3px',
-            marginTop: '60px',
-            justifyItems: 'center',
-          }}
-        >
-          {images.map((image, index) => (
-            <div
-              key={index}
-              onClick={() => setPreviewIndex(index)}
-              style={{
-                width: '100%',
-                maxWidth: '140px',
-                aspectRatio: '3/4',
-                overflow: 'hidden',
-                borderRadius: '4px',
-                background: '#f0f0f0',
-                cursor: 'pointer',
-                position: 'relative',
-              }}
-            >
-              <img
-                src={`/Barber-Inspo/${image}`}
-                alt={styleData[index]?.styleName ?? `Haircut ${index + 1}`}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-              {styleData[index]?.popular && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '6px',
-                    right: '6px',
-                    background: 'black',
-                    color: 'white',
-                    fontSize: '9px',
-                    fontWeight: 600,
-                    padding: '2px 6px',
-                    borderRadius: '999px',
-                  }}
-                >
-                  Popular
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          /* ── Skeleton grid ── */
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '3px',
+              marginTop: '60px',
+              justifyItems: 'center',
+              background: '#fff',
+            }}
+          >
+            {Array.from({ length: 14 }).map((_, i) => (
+              <GridTileSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          /* ── Real grid ── */
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '3px',
+              marginTop: '60px',
+              justifyItems: 'center',
+            }}
+          >
+            {images.map((image, index) => (
+              <div
+                key={index}
+                onClick={() => setPreviewIndex(index)}
+                style={{
+                  width: '100%',
+                  maxWidth: '140px',
+                  aspectRatio: '3/4',
+                  overflow: 'hidden',
+                  borderRadius: '4px',
+                  background: '#f0f0f0',
+                  cursor: 'pointer',
+                  position: 'relative',
+                }}
+              >
+                <img
+                  src={`/Barber-Inspo/${image}`}
+                  alt={styleData[index]?.styleName ?? `Haircut ${index + 1}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                {styleData[index]?.popular && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '6px',
+                      right: '6px',
+                      background: 'black',
+                      color: 'white',
+                      fontSize: '9px',
+                      fontWeight: 600,
+                      padding: '2px 6px',
+                      borderRadius: '999px',
+                    }}
+                  >
+                    Popular
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── Preview Modal ── */}
@@ -283,13 +339,7 @@ const BarberInspo: React.FC = () => {
               {current.styleName}
             </span>
             {current.popular && (
-              <span
-                style={{
-                  background: 'black', color: 'white',
-                  fontSize: '10px', fontWeight: 600,
-                  padding: '3px 10px', borderRadius: '999px',
-                }}
-              >
+              <span style={{ background: 'black', color: 'white', fontSize: '10px', fontWeight: 600, padding: '3px 10px', borderRadius: '999px' }}>
                 Popular
               </span>
             )}
@@ -304,64 +354,31 @@ const BarberInspo: React.FC = () => {
 
           {/* Style Info */}
           <div style={{ padding: '16px' }}>
-
-            {/* Name + price */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'black', margin: 0 }}>
-                {current.styleName}
-              </h2>
-              <span style={{ fontSize: '16px', fontWeight: 700, color: 'black' }}>
-                MWK {current.price.toLocaleString()}
-              </span>
+              <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'black', margin: 0 }}>{current.styleName}</h2>
+              <span style={{ fontSize: '16px', fontWeight: 700, color: 'black' }}>MWK {current.price.toLocaleString()}</span>
             </div>
-
-            {/* Duration */}
-            <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.45)', marginBottom: '8px' }}>
-              ⏱ {current.duration} min session
-            </p>
-
-            {/* Description */}
-            <p style={{ fontSize: '14px', color: 'rgba(0,0,0,0.7)', lineHeight: '1.6', marginBottom: '12px' }}>
-              {current.description}
-            </p>
-
+            <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.45)', marginBottom: '8px' }}>⏱ {current.duration} min session</p>
+            <p style={{ fontSize: '14px', color: 'rgba(0,0,0,0.7)', lineHeight: '1.6', marginBottom: '12px' }}>{current.description}</p>
             <div style={{ borderTop: '1px solid rgba(0,0,0,0.08)', margin: '12px 0' }} />
-
-            {/* Caption */}
             <p style={{ marginBottom: '4px', fontSize: '13px' }}>
               <span style={{ fontWeight: 700 }}>{current.user} </span>
               <span style={{ color: 'rgba(0,0,0,0.6)' }}>{current.caption}</span>
             </p>
-            <p style={{ fontSize: '11px', color: 'rgba(0,0,0,0.35)', marginBottom: '24px' }}>
-              {current.date}
-            </p>
-
-            {/* Book Button */}
+            <p style={{ fontSize: '11px', color: 'rgba(0,0,0,0.35)', marginBottom: '24px' }}>{current.date}</p>
             <button
               onClick={() => handleBookStyle(current)}
-              style={{
-                width: '100%',
-                padding: '14px',
-                background: 'black',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                fontWeight: 700,
-                fontSize: '15px',
-                cursor: 'pointer',
-                letterSpacing: '0.02em',
-              }}
+              style={{ width: '100%', padding: '14px', background: 'black', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, fontSize: '15px', cursor: 'pointer', letterSpacing: '0.02em' }}
             >
               Book This Style →
             </button>
-
             <p style={{ textAlign: 'center', fontSize: '11px', color: 'rgba(0,0,0,0.35)', marginTop: '10px' }}>
               MWK {current.price.toLocaleString()} · {current.duration} min · Pay on arrival or online
             </p>
           </div>
         </div>
       )}
-    </>
+     </>
   );
 };
 

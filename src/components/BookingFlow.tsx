@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
-import NavBar from './NavBar';
+
 import paymentService, { PaymentInitData } from "../services/paymentService";
 
 // ─── Toast Notification System ───────────────────────────────────────────────
@@ -438,7 +438,7 @@ const BookingFlow: React.FC = () => {
           </button>
         </div>
       </div>
-      <NavBar />
+    
       <style>{`
         @keyframes slide-in { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
         .animate-slide-in { animation: slide-in 0.25s ease-out; }
