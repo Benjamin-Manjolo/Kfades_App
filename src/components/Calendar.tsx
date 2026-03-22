@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { format, addDays, isToday, isTomorrow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { TimeSlot } from '../types';
-import NavBar from './NavBar';
+
 
 const Calendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -58,7 +58,7 @@ const Calendar: React.FC = () => {
     <>
   
      
-    <div className='bg-white p-15 pb-32'>
+    <div className='bg-white p-15 pb-80'>
       <div className='font-semibold text-xl w-full bg-white fixed top-0 left-0 z-50 p-3'>Date and time</div>
          
     <div className='animate-[neonGlow_1.5s_eagse-in-out_infinite_alternate] h-screen w-full' >
@@ -143,7 +143,7 @@ const Calendar: React.FC = () => {
     </div>
    
      </div>
-     <NavBar/>
+     
       </>
   );
  
