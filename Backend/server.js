@@ -10,6 +10,7 @@ const cors = require('cors');
 // Import routes
 const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const payoutRoutes  = require('./routes/payoutRoutes'); // ← FIX: was missing
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -24,11 +25,11 @@ app.get('/', (req, res) => {
 });
 
 // Mount routes
-app.use('/api/bookings', bookingRoutes);
-app.use('/paychangu', paymentRoutes);
+app.use('/api/bookings',      bookingRoutes);
+app.use('/paychangu',         paymentRoutes);
+app.use('/paychangu/payouts', payoutRoutes); // ← FIX: was never mounted
 
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-

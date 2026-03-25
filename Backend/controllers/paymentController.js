@@ -8,8 +8,6 @@ const supabase = require('../config/supabase');
 const paymentController = {
   /**
    * Health check for payment API
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
    */
   async healthCheck(req, res) {
     try {
@@ -30,20 +28,10 @@ const paymentController = {
 
   /**
    * Initiate a payment transaction
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
    */
   async initiateTransaction(req, res) {
     try {
-      const {
-        amount,
-        tx_ref,
-        first_name,
-        last_name,
-        email,
-        callback_url,
-        return_url,
-      } = req.body;
+      const { amount, tx_ref, first_name, last_name, email, callback_url, return_url } = req.body;
 
       if (!tx_ref || !amount) {
         return res.status(400).json({
@@ -53,100 +41,55 @@ const paymentController = {
       }
 
       const result = await paychanguService.initiateTransaction({
-        amount,
-        tx_ref,
-        first_name,
-        last_name,
-        email,
-        callback_url,
-        return_url,
+        amount, tx_ref, first_name, last_name, email, callback_url, return_url,
       });
 
-      res.status(200).json({
-        error: false,
-        data: result,
-      });
+      res.status(200).json({ error: false, data: result });
     } catch (error) {
       console.error('Payment error:', error.response?.data || error.message);
-      const errorMessage = error.response?.data?.message 
-        || error.message 
+      const errorMessage = error.response?.data?.message
+        || error.message
         || 'Failed to initiate payment. Please check your API credentials.';
-      res.status(500).json({
-        error: true,
-        message: errorMessage,
-      });
+      res.status(500).json({ error: true, message: errorMessage });
     }
   },
 
   /**
    * Verify a payment transaction
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
    */
   async verifyPayment(req, res) {
     try {
       const { tx_ref } = req.params;
-
       if (!tx_ref) {
-        return res.status(400).json({
-          error: true,
-          message: 'tx_ref is required',
-        });
+        return res.status(400).json({ error: true, message: 'tx_ref is required' });
       }
-
       const result = await paychanguService.verifyPayment(tx_ref);
-
-      res.status(200).json({
-        error: false,
-        data: result,
-      });
+      res.status(200).json({ error: false, data: result });
     } catch (error) {
       console.error(error.response?.data || error.message);
-      res.status(500).json({
-        error: true,
-        message: error.response?.data || error.message,
-      });
+      res.status(500).json({ error: true, message: error.response?.data || error.message });
     }
   },
 
   /**
    * Get available mobile money providers
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
    */
   async getMobileMoney(req, res) {
     try {
       const result = await paychanguService.getMobileMoneyProviders();
-
-      res.status(200).json({
-        error: false,
-        data: result,
-      });
+      res.status(200).json({ error: false, data: result });
     } catch (error) {
       console.error(error.response?.data || error.message);
-      res.status(500).json({
-        error: true,
-        message: error.response?.data || error.message,
-      });
+      res.status(500).json({ error: true, message: error.response?.data || error.message });
     }
   },
 
   /**
    * Initialize bank transfer / direct charge
-   * @param {Object} req - Express request object
-   * @param {Object} res - Express response object
    */
   async bankTransfer(req, res) {
     try {
-      const {
-        amount,
-        payment_method,
-        charge_id,
-        email,
-        first_name,
-        last_name,
-        mobile,
-      } = req.body;
+      const { amount, payment_method, charge_id, email, first_name, last_name, mobile } = req.body;
 
       if (!amount || !payment_method || !charge_id || !mobile) {
         return res.status(400).json({
@@ -156,32 +99,22 @@ const paymentController = {
       }
 
       const result = await paychanguService.initializeBankTransfer({
-        amount,
-        payment_method,
-        charge_id,
-        email,
-        first_name,
-        last_name,
-        mobile,
+        amount, payment_method, charge_id, email, first_name, last_name, mobile,
       });
 
-      res.status(200).json({
-        error: false,
-        data: result,
-      });
+      res.status(200).json({ error: false, data: result });
     } catch (error) {
       console.error(error.response?.data || error.message);
-      res.status(500).json({
-        error: true,
-        message: error.response?.data || error.message,
-      });
+      res.status(500).json({ error: true, message: error.response?.data || error.message });
     }
   },
 
   /**
-   * Handle Paychangu webhook callback for payment confirmation - PRODUCTION SECURE VERSION
-   * Verifies payment with PayChangu API before updating booking
-   * Prevents duplicates and deep destructuring crashes
+   * Handle Paychangu webhook callback
+   * 1. Verify payment with PayChangu API
+   * 2. Update booking status → confirmed
+   * 3. Auto-trigger payout to barber
+   * 4. Save payout record in Supabase
    */
   async handleCallback(req, res) {
     try {
@@ -190,56 +123,116 @@ const paymentController = {
 
       const tx_ref = callbackData?.tx_ref;
       if (!tx_ref) {
-        console.log("tx_ref missing");
+        console.log("tx_ref missing from webhook — ignoring");
         return res.sendStatus(200);
       }
 
-      // Prevent duplicate processing
+      // ── 1. Check for duplicate processing ──────────────────────────────────
       const { data: booking, error: dbError } = await supabase
         .from('bookings')
-        .select('status')
+        .select('status, total_price')
         .eq('tx_ref', tx_ref)
         .maybeSingle();
 
       if (dbError) {
         console.error("DB lookup error:", dbError.message);
       }
+
       if (booking && booking.status !== 'pending') {
         console.log(`tx_ref ${tx_ref} already processed (status: ${booking.status})`);
         return res.sendStatus(200);
       }
 
-      // Verify with PayChangu API (security rule)
+      // ── 2. Verify with PayChangu API ────────────────────────────────────────
       const verification = await paychanguService.verifyPayment(tx_ref);
-      
-      if (verification?.data?.status === 'success') {
-        console.log("Payment verified:", tx_ref);
-        
-        // Update booking status to confirmed
-        if (booking) {
-          const { error: updateError } = await supabase
-            .from('bookings')
-            .update({ status: 'confirmed' })
-            .eq('tx_ref', tx_ref);
-            
-          if (updateError) {
-            console.error("Failed to update booking:", updateError.message);
-          } else {
-            console.log(`Booking confirmed for tx_ref: ${tx_ref}`);
-          }
-        }
-      } else {
+      const paymentVerified = verification?.data?.status === 'success';
+
+      if (!paymentVerified) {
         console.log(`Payment verification failed for tx_ref: ${tx_ref}`);
+        return res.sendStatus(200);
+      }
+
+      console.log("Payment verified:", tx_ref);
+
+      // ── 3. Update booking → confirmed ──────────────────────────────────────
+      if (booking) {
+        const { error: updateError } = await supabase
+          .from('bookings')
+          .update({ status: 'confirmed' })
+          .eq('tx_ref', tx_ref);
+
+        if (updateError) {
+          console.error("Failed to update booking:", updateError.message);
+        } else {
+          console.log(`Booking confirmed for tx_ref: ${tx_ref}`);
+        }
+      }
+
+      // ── 4. Auto-trigger payout to barber ───────────────────────────────────
+      const amount = booking?.total_price ?? verification?.data?.amount;
+
+      if (!amount) {
+        console.error("Cannot determine payout amount — skipping payout");
+        return res.sendStatus(200);
+      }
+
+      const payoutChargeId = `PAYOUT_${tx_ref}`;
+
+      // Guard: don't double-payout if already recorded
+      const { data: existingPayout } = await supabase
+        .from('payouts')
+        .select('id')
+        .eq('charge_id', payoutChargeId)
+        .maybeSingle();
+
+      if (existingPayout) {
+        console.log(`Payout already recorded for ${payoutChargeId} — skipping`);
+        return res.sendStatus(200);
+      }
+
+      let payoutStatus = 'failed';
+      let payoutResponse = null;
+      let payoutError = null;
+
+      try {
+        payoutResponse = await paychanguService.initiateMobilePayout({
+          amount,
+          charge_id: payoutChargeId,
+        });
+        payoutStatus = payoutResponse?.data?.status || 'pending';
+        console.log(`Payout initiated for tx_ref: ${tx_ref}, amount: MWK ${amount}`);
+      } catch (payoutErr) {
+        payoutError = payoutErr?.response?.data?.message || payoutErr?.message || 'Unknown payout error';
+        console.error("Payout failed:", payoutError);
+      }
+
+      // ── 5. Save payout record ───────────────────────────────────────────────
+      const { error: payoutInsertError } = await supabase
+        .from('payouts')
+        .insert([{
+          tx_ref,
+          charge_id: payoutChargeId,
+          amount,
+          status: payoutStatus,
+          mobile: process.env.BARBER_MOBILE || '0991234567',
+          payout_response: payoutResponse ? JSON.stringify(payoutResponse) : null,
+          error_message: payoutError,
+          created_at: new Date().toISOString(),
+        }]);
+
+      if (payoutInsertError) {
+        console.error("Failed to save payout record:", payoutInsertError.message);
+      } else {
+        console.log(`Payout record saved — status: ${payoutStatus}`);
       }
 
       res.sendStatus(200);
     } catch (error) {
       console.error("Webhook error:", error);
-      res.sendStatus(200);
+      res.sendStatus(200); // always 200 to Paychangu to prevent retries
     }
   },
 
 };
 
 module.exports = paymentController;
-

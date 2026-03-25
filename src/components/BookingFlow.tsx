@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Service, Booking } from '../types';
-
-import paymentService, { PaymentInitData } from "../services/paymentService";
+import paymentService, { PaymentInitData } from '../services/paymentService';
 
 // ─── Toast Notification System ───────────────────────────────────────────────
 
@@ -92,15 +91,14 @@ export interface StoredBooking {
   paymentOption: string;
   totalPrice: number;
   status: string;
-  bookedAt: string; // ISO timestamp when they booked on this device
+  bookedAt: string;
 }
 
 function saveBookingLocally(booking: StoredBooking) {
   try {
     const existing: StoredBooking[] = JSON.parse(localStorage.getItem(MY_BOOKINGS_KEY) || '[]');
-    // avoid duplicates
     const deduped = existing.filter(b => b.bookingId !== booking.bookingId);
-    deduped.unshift(booking); // newest first
+    deduped.unshift(booking);
     localStorage.setItem(MY_BOOKINGS_KEY, JSON.stringify(deduped));
   } catch {
     // silently fail — don't block the booking
@@ -118,7 +116,7 @@ const BookingFlow: React.FC = () => {
   const [customerInfo, setCustomerInfo] = useState({ name: '', phone: '', address: '', specialRequests: '' });
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentOption, setPaymentOption] = useState<'deposit' | 'full' | 'cash'>('deposit');
+  const [paymentOption, setPaymentOption] = useState<'full' | 'cash'>('full');
   const [toasts, setToasts] = useState<Toast[]>([]);
   const navigate = useNavigate();
 
@@ -132,6 +130,7 @@ const BookingFlow: React.FC = () => {
     setToasts(prev => prev.filter(t => t.id !== id));
   }, []);
 
+  // FIX: tx_ref is now generated ONCE and shared between booking save + payment initiation
   const generateTxRef = () => `TX_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
   useEffect(() => {
@@ -160,28 +159,100 @@ const BookingFlow: React.FC = () => {
 
   const handleBack = () => setActiveStep(prev => prev - 1);
 
-  const handlePay = async () => {
-    if (!selectedService) {
-      addToast('error', 'No Service Selected', 'Please go back and select a service.');
+  // ── Core confirm: save booking + optionally pay ──
+  const handleConfirmBooking = async () => {
+    if (!selectedService || !bookingData) {
+      addToast('error', 'Booking Error', 'Missing service or date information. Please start over.');
       return;
     }
+
     setIsLoading(true);
+
     try {
+      // FIX: generate tx_ref once here so booking record and payment share the same reference
+      const txRef = generateTxRef();
+      const bookingId = txRef; // use same value so PayCheckout lookup works
+
+      // ── 1. Persist to this device immediately ──
+      const storedBooking: StoredBooking = {
+        bookingId,
+        serviceName: selectedService.name,
+        date: bookingData.date,
+        time: bookingData.time,
+        customerName: customerInfo.name,
+        phone: customerInfo.phone,
+        address: customerInfo.address,
+        paymentOption,
+        totalPrice: selectedService.price,
+        status: 'pending',
+        bookedAt: new Date().toISOString(),
+      };
+      saveBookingLocally(storedBooking);
+
+      // ── 2. Save to backend — include tx_ref so webhook can find this booking ──
+      try {
+        const response = await fetch('https://kfades.onrender.com/api/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: bookingId,
+            serviceName: selectedService.name,
+            date: bookingData.date,
+            time: bookingData.time,
+            customerName: customerInfo.name,
+            phone: customerInfo.phone,
+            address: customerInfo.address,
+            specialRequests: customerInfo.specialRequests,
+            paymentOption,
+            status: 'pending',
+            totalPrice: selectedService.price,
+            tx_ref: txRef, // FIX: was missing — webhook couldn't match booking to payment
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — booking noted locally.');
+        }
+      } catch (err: any) {
+        if (err?.message?.includes('Failed to fetch')) {
+          addToast('warning', 'Offline Mode', 'Could not reach server. Your booking is saved locally.');
+        } else {
+          addToast('error', 'Booking Failed', 'Unable to save your booking. Please try again or call us directly.');
+          return;
+        }
+      }
+
+      // ── 3. Cash → go straight to checkout screen ──
+      if (paymentOption === 'cash') {
+        localStorage.removeItem('selectedService');
+        localStorage.removeItem('bookingData');
+        addToast('success', 'Booking Confirmed!', 'Check your activity tab to track your appointment.');
+        navigate('/checkout');
+        return;
+      }
+
+      // ── 4. Online payment → initiate Paychangu checkout ──
       const paymentData: PaymentInitData = {
         amount: selectedService.price,
-        tx_ref: generateTxRef(),
+        tx_ref: txRef, // FIX: same tx_ref as saved in booking record
         first_name: customerInfo.name,
         last_name: 'customer',
         email: 'customer@email.com',
         callback_url: 'https://kfades.onrender.com/paychangu/callback',
         return_url: 'https://kfades.vercel.app/checkout',
       };
+
       const response = await paymentService.initiateTransaction(paymentData);
+
       if (response.error) {
         addToast('error', 'Payment Failed', response.message || 'Unable to process payment. Please try again.');
         return;
       }
+
       if (response.data?.data?.checkout_url) {
+        localStorage.removeItem('selectedService');
+        localStorage.removeItem('bookingData');
         addToast('success', 'Redirecting', 'Taking you to the secure payment page...');
         setTimeout(() => { window.location.href = response.data.data.checkout_url; }, 800);
       } else {
@@ -193,99 +264,6 @@ const BookingFlow: React.FC = () => {
       } else {
         addToast('error', 'Payment Failed', 'An unexpected error occurred. Please try again or use cash.');
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // ── Booking ──
-  const handleFinish = async () => {
-    if (!selectedService || !bookingData) {
-      addToast('error', 'Booking Error', 'Missing service or date information. Please start over.');
-      return false;
-    }
-
-    const bookingId = generateTxRef();
-
-    const newBooking: Booking = {
-      id: bookingId,
-      serviceId: selectedService.id,
-      date: bookingData.date,
-      time: bookingData.time,
-      customerName: customerInfo.name,
-      phone: customerInfo.phone,
-      address: customerInfo.address,
-      specialRequests: customerInfo.specialRequests,
-      paymentOption,
-      status: 'pending',
-      totalPrice: selectedService.price,
-    };
-
-    // ── Persist booking to this device immediately so UpcomingAppointments can track it ──
-    const storedBooking: StoredBooking = {
-      bookingId,
-      serviceName: selectedService.name,
-      date: bookingData.date,
-      time: bookingData.time,
-      customerName: customerInfo.name,
-      phone: customerInfo.phone,
-      address: customerInfo.address,
-      paymentOption,
-      totalPrice: selectedService.price,
-      status: 'pending',
-      bookedAt: new Date().toISOString(),
-    };
-    saveBookingLocally(storedBooking);
-
-    try {
-      const response = await fetch('https://kfades.onrender.com/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: newBooking.id,
-          serviceName: selectedService.name,
-          date: newBooking.date,
-          time: newBooking.time,
-          customerName: newBooking.customerName,
-          phone: newBooking.phone,
-          address: newBooking.address,
-          specialRequests: newBooking.specialRequests,
-          paymentOption: newBooking.paymentOption,
-          status: newBooking.status,
-          totalPrice: newBooking.totalPrice,
-        }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        addToast('warning', 'Booking Saved Locally', errData.message || 'Server error — your booking was noted locally.');
-        return true;
-      }
-
-      addToast('success', 'Booking Confirmed!', 'Check your activity tab to track your appointment.');
-      localStorage.removeItem('selectedService');
-      localStorage.removeItem('bookingData');
-      return true;
-    } catch (err: any) {
-      if (err?.message?.includes('Failed to fetch')) {
-        addToast('warning', 'Offline Mode', 'Could not reach server. Your booking is saved locally.');
-        return true;
-      }
-      addToast('error', 'Booking Failed', 'Unable to save your booking. Please try again or call us directly.');
-      return false;
-    }
-  };
-
-  const handleConfirmBooking = async () => {
-    setIsLoading(true);
-    try {
-      const saved = await handleFinish();
-      if (!saved) return;
-      if (paymentOption === 'cash') {
-        navigate('/checkout');
-        return;
-      }
-      await handlePay();
     } finally {
       setIsLoading(false);
     }
@@ -374,20 +352,19 @@ const BookingFlow: React.FC = () => {
               {customerInfo.specialRequests && <p className="text-black">Notes: {customerInfo.specialRequests}</p>}
               <p className="text-md font-bold text-black mt-4">Total: MWK {selectedService?.price}</p>
             </div>
+
             <h3 className="text-lg font-semibold text-black mb-3">Payment Option</h3>
             <div className="space-y-2">
+              {/* FIX: deposit option removed — it was marked "Coming Soon" yet still selectable,
+                   which would have sent an incorrect amount to Paychangu */}
               {[
-                { value: 'deposit', label: `Deposit (MWK ${Math.round((selectedService?.price ?? 0) * 0.3)}) — Secures your slot`, badge: 'Coming Soon' },
-                { value: 'full',    label: `Full Payment (MWK ${selectedService?.price})`, badge: null },
-                { value: 'cash',    label: 'Cash on Arrival', badge: null },
-              ].map(({ value, label, badge }) => (
+                { value: 'full',  label: `Full Payment (MWK ${selectedService?.price})` },
+                { value: 'cash',  label: 'Cash on Arrival' },
+              ].map(({ value, label }) => (
                 <label key={value} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 ${paymentOption === value ? 'bg-white/5' : 'hover:bg-white/5'}`}>
                   <input type="radio" name="payment" value={value} checked={paymentOption === value}
                     onChange={(e) => setPaymentOption(e.target.value as typeof paymentOption)} className="w-4 h-4" />
-                  <span className="text-black text-xs flex items-center gap-2 flex-wrap">
-                    {label}
-                    {badge && <span className="bg-red-600 text-black text-xs font-medium px-2 py-0.5 rounded-full">{badge}</span>}
-                  </span>
+                  <span className="text-black text-xs">{label}</span>
                 </label>
               ))}
             </div>
@@ -438,7 +415,7 @@ const BookingFlow: React.FC = () => {
           </button>
         </div>
       </div>
-    
+
       <style>{`
         @keyframes slide-in { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
         .animate-slide-in { animation: slide-in 0.25s ease-out; }

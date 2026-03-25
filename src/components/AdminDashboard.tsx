@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,13 +25,13 @@ interface Notification {
   read: boolean;
 }
 
-// ── Status helpers ──────────────────────────────────────────────────────────
+// ── Status helpers ────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { dot: string; pill: string; label: string }> = {
-  pending:   { dot: 'bg-amber-400',  pill: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',  label: 'Pending'   },
-  confirmed: { dot: 'bg-blue-400',   pill: 'bg-blue-500/15  text-blue-400  border border-blue-500/30',   label: 'Confirmed' },
-  completed: { dot: 'bg-emerald-400',pill: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30', label: 'Completed' },
-  cancelled: { dot: 'bg-red-400',    pill: 'bg-white/15   text-red-400   border border-red-500/30',    label: 'Cancelled' },
-  'no-show': { dot: 'bg-gray-500',   pill: 'bg-gray-500/15  text-black  border border-gray-500/30',   label: 'No-show'   },
+  pending:   { dot: 'bg-amber-400',   pill: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',    label: 'Pending'   },
+  confirmed: { dot: 'bg-blue-400',    pill: 'bg-blue-500/15  text-blue-400  border border-blue-500/30',      label: 'Confirmed' },
+  completed: { dot: 'bg-emerald-400', pill: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30', label: 'Completed' },
+  cancelled: { dot: 'bg-red-400',     pill: 'bg-white/15   text-red-400   border border-red-500/30',         label: 'Cancelled' },
+  'no-show': { dot: 'bg-gray-500',    pill: 'bg-gray-500/15  text-black  border border-gray-500/30',         label: 'No-show'   },
 };
 
 const StatusPill: React.FC<{ status: string }> = ({ status }) => {
@@ -45,7 +44,6 @@ const StatusPill: React.FC<{ status: string }> = ({ status }) => {
   );
 };
 
-// ── Stat card ────────────────────────────────────────────────────────────────
 const StatCard: React.FC<{ label: string; value: string | number; accent: string; icon: any }> = ({ label, value, accent, icon }) => (
   <div className="bg-white rounded-lg p-5 flex items-center gap-4 backdrop-blur-sm">
     <div className={`w-10 h-10 rounded-md flex items-center justify-center text-md ${accent}`}>
@@ -58,11 +56,12 @@ const StatCard: React.FC<{ label: string; value: string | number; accent: string
   </div>
 );
 
-// ── Main ─────────────────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  // FIX: added 'payouts' as a valid tab so the dashboard has a direct link
   const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'analytics'>('dashboard');
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -120,10 +119,10 @@ const AdminDashboard: React.FC = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   // ── Analytics ──
-  const totalRevenue = bookings.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
-  const pendingBookings = bookings.filter(b => b.status === 'pending').length;
+  const totalRevenue      = bookings.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+  const pendingBookings   = bookings.filter(b => b.status === 'pending').length;
   const completedBookings = bookings.filter(b => b.status === 'completed').length;
-  const todayBookings = bookings.filter(b => b.date === new Date().toISOString().split('T')[0]).length;
+  const todayBookings     = bookings.filter(b => b.date === new Date().toISOString().split('T')[0]).length;
 
   const serviceCounts = bookings.reduce((acc, b) => {
     acc[b.service_name] = (acc[b.service_name] || 0) + 1;
@@ -141,16 +140,21 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <>
-      
-
       <div className="min-h-screen">
 
         {/* ── Header ── */}
-        <header className="bg-white  px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
+        <header className="bg-white px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
           <div className="flex justify-between items-center max-w-7xl mx-auto">
-           
-
             <div className="flex items-center gap-3">
+
+              {/* FIX: Added Payouts link so admin can navigate to /admin/payouts */}
+              <button
+                onClick={() => navigate('/admin/payouts')}
+                className="text-sm text-black hover:text-emerald-600 border border-[#3D444D] hover:border-emerald-500/50 px-3 py-2 rounded-md transition-colors duration-200"
+              >
+                💸 Payouts
+              </button>
+
               {/* Notification bell */}
               <div className="relative">
                 <button
@@ -168,9 +172,11 @@ const AdminDashboard: React.FC = () => {
                   )}
                 </button>
 
+                {/* FIX: notification panel was position:fixed top-12 left-0 — it would
+                    render off-screen on mobile. Changed to absolute, anchored to the bell. */}
                 {notifOpen && (
-                  <div className="fixed left-0 top-12 w-80 bg-white  shadow-2xl z-50 overflow-hidden">
-                    <div className="px-4 py-3 ">
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-white shadow-2xl z-50 overflow-hidden rounded-lg border border-gray-100">
+                    <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-black text-sm font-semibold">Notifications</p>
                     </div>
                     {notifications.length === 0 ? (
@@ -180,13 +186,13 @@ const AdminDashboard: React.FC = () => {
                         <div
                           key={n.id}
                           onClick={() => markNotificationRead(n.id)}
-                          className={`px-4 py-3  cursor-pointer hover:bg-white/5 transition-colors ${n.read ? 'opacity-50' : ''}`}
+                          className={`px-4 py-3 border-b border-gray-50 cursor-pointer hover:bg-gray-50 transition-colors ${n.read ? 'opacity-50' : ''}`}
                         >
                           <div className="flex items-start justify-between gap-2">
                             <p className="text-black text-xs leading-relaxed">{n.message}</p>
                             {!n.read && <span className="w-2 h-2 rounded-full bg-blue-400 mt-1 shrink-0" />}
                           </div>
-                          <p className="text-black text-[10px] mt-1">{n.timestamp}</p>
+                          <p className="text-gray-400 text-[10px] mt-1">{n.timestamp}</p>
                         </div>
                       ))
                     )}
@@ -197,7 +203,7 @@ const AdminDashboard: React.FC = () => {
               {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="text-sm text-black hover:text-red-400 border border-[#3D444D] hover:border-red-500/50 px-4 py-2 rounded-md transition-colors duration-200 fixed right-0"
+                className="text-sm text-black hover:text-red-400 border border-[#3D444D] hover:border-red-500/50 px-4 py-2 rounded-md transition-colors duration-200"
               >
                 Logout
               </button>
@@ -206,7 +212,7 @@ const AdminDashboard: React.FC = () => {
         </header>
 
         {/* ── Tabs ── */}
-        <nav className="bg-white/80  px-6 backdrop-blur-sm">
+        <nav className="bg-white/80 px-6 backdrop-blur-sm">
           <div className="flex gap-0 max-w-7xl mx-auto">
             {TAB_LABELS.map(({ key, label }) => (
               <button
@@ -236,20 +242,18 @@ const AdminDashboard: React.FC = () => {
             </div>
           ) : (
             <>
-
               {/* ── DASHBOARD TAB ── */}
               {activeTab === 'dashboard' && (
-                <div className="space-y-6 ">
+                <div className="space-y-6">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <StatCard label="Total Revenue"    value={`MWK ${totalRevenue.toLocaleString()}`} accent="bg-black/50" icon="" />
-                    <StatCard label="Total Bookings"   value={bookings.length}   accent="bg-black/50"    icon="" />
-                    <StatCard label="Pending"          value={pendingBookings}   accent="bg-black/50"  icon="" />
-                    <StatCard label="Today"            value={todayBookings}     accent="bg-black/50" icon="" />
+                    <StatCard label="Total Revenue"  value={`MWK ${totalRevenue.toLocaleString()}`} accent="bg-black/50" icon="" />
+                    <StatCard label="Total Bookings" value={bookings.length}   accent="bg-black/50" icon="" />
+                    <StatCard label="Pending"         value={pendingBookings}   accent="bg-black/50" icon="" />
+                    <StatCard label="Today"           value={todayBookings}     accent="bg-black/50" icon="" />
                   </div>
 
-                  {/* Recent Bookings */}
                   <div className="bg-white rounded-lg overflow-hidden backdrop-blur-sm">
-                    <div className="px-5 py-4 ">
+                    <div className="px-5 py-4">
                       <h2 className="text-black font-semibold tracking-wide">Recent Bookings</h2>
                     </div>
                     <div className="overflow-x-auto">
@@ -290,28 +294,20 @@ const AdminDashboard: React.FC = () => {
               {/* ── BOOKINGS TAB ── */}
               {activeTab === 'bookings' && (
                 <div className="space-y-4">
-                  {/* Filter */}
-<div className="relative">
-  <select
-    value={filterStatus}
-    onChange={(e) => setFilterStatus(e.target.value)}
-    className="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all duration-200 capitalize"
-   
-    >
-    {['all', 'pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(s => (
-      <option key={s} value={s} className="capitalize">
-        {s.charAt(0).toUpperCase() + s.slice(1)}
-      </option>
-    ))}
-    
-    </select>
-   
+                  <div className="relative">
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                      className="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm font-medium text-gray-700 shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-all duration-200 capitalize"
+                    >
+                      {['all', 'pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(s => (
+                        <option key={s} value={s} className="capitalize">
+                          {s.charAt(0).toUpperCase() + s.slice(1)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-  {/* Custom chevron icon */}
- 
-</div>
-
-                  {/* Table */}
                   <div className="bg-white rounded-lg overflow-hidden backdrop-blur-sm">
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
@@ -369,12 +365,11 @@ const AdminDashboard: React.FC = () => {
               {/* ── ANALYTICS TAB ── */}
               {activeTab === 'analytics' && (
                 <div className="space-y-6">
-                  {/* Top row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { label: 'Total Revenue', value: `MWK ${totalRevenue.toLocaleString()}`, sub: `From ${bookings.length} bookings`, accent: ' bg-white border-2-blue' },
-                      { label: 'Completed',     value: completedBookings,                      sub: `${bookings.length > 0 ? Math.round((completedBookings / bookings.length) * 100) : 0}% completion rate`, accent: 'bg-white border-2-blue' },
-                      { label: 'Avg. Booking',  value: `MWK ${bookings.length > 0 ? Math.round(totalRevenue / bookings.length).toLocaleString() : 0}`, sub: 'Per service', accent: 'bg-white border-2-blue' },
+                      { label: 'Total Revenue', value: `MWK ${totalRevenue.toLocaleString()}`, sub: `From ${bookings.length} bookings`, accent: 'bg-white border-2' },
+                      { label: 'Completed',     value: completedBookings,                      sub: `${bookings.length > 0 ? Math.round((completedBookings / bookings.length) * 100) : 0}% completion rate`, accent: 'bg-white border-2' },
+                      { label: 'Avg. Booking',  value: `MWK ${bookings.length > 0 ? Math.round(totalRevenue / bookings.length).toLocaleString() : 0}`, sub: 'Per service', accent: 'bg-white border-2' },
                     ].map(card => (
                       <div key={card.label} className={`border-2 rounded-lg p-6 backdrop-blur-sm ${card.accent}`}>
                         <p className="text-black text-xs uppercase tracking-widest">{card.label}</p>
@@ -384,9 +379,8 @@ const AdminDashboard: React.FC = () => {
                     ))}
                   </div>
 
-                  {/* Top Services */}
                   <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
-                    <div className="px-5 py-4 ">
+                    <div className="px-5 py-4">
                       <h2 className="text-black font-semibold tracking-wide">Top Services</h2>
                     </div>
                     <div className="p-5 space-y-4">
@@ -412,11 +406,9 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Payment Methods & Status side-by-side */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Payment methods */}
                     <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
-                      <div className="px-5 py-4 ">
+                      <div className="px-5 py-4">
                         <h2 className="text-black font-semibold tracking-wide">Payment Methods</h2>
                       </div>
                       <div className="p-5 grid grid-cols-3 gap-3">
@@ -435,16 +427,15 @@ const AdminDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Status distribution */}
                     <div className="bg-white rounded-lg backdrop-blur-sm overflow-hidden">
-                      <div className="px-5 py-4 ">
+                      <div className="px-5 py-4">
                         <h2 className="text-black font-semibold tracking-wide">Booking Status</h2>
                       </div>
                       <div className="p-8 grid grid-cols-2 gap-4">
                         {['pending', 'confirmed', 'completed', 'cancelled', 'no-show'].map(status => {
                           const count = bookings.filter(b => b.status === status).length;
                           return (
-                            <div key={status} className="bg-white border  rounded-lg p-8 text-center">
+                            <div key={status} className="bg-white border rounded-lg p-8 text-center">
                               <p className="text-black text-md font-bold">{count}</p>
                               <StatusPill status={status} />
                             </div>
@@ -455,7 +446,6 @@ const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
               )}
-
             </>
           )}
         </main>

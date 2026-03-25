@@ -10,6 +10,7 @@ import BarberInspo from './components/BarberInspo';
 import PayCheckout from './components/PayCheckout';
 import UpcomingAppointments from './components/UpcomingAppointment';
 import NavBar from './components/NavBar';
+import PayoutHistory from './components/PayoutHistory';
 
 // Pages where the NavBar should NOT appear
 const HIDDEN_NAV_PATHS = ['/', '/admin', '/admin/dashboard', '/checkout'];
@@ -33,6 +34,7 @@ function App() {
         <Route path="/checkout" element={<PayCheckout />} />
         <Route path="/barber-inspo" element={<BarberInspo />} />
         <Route path="/appointment" element={<UpcomingAppointments />} />
+        <Route path="/admin/payouts" element={<PayoutHistory />} />
       </Routes>
       <GlobalNavBar />
     </Router>
