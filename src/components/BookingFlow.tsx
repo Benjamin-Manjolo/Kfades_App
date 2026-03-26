@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Service, Booking } from '../types';
+import { Service } from '../types';
 import paymentService, { PaymentInitData } from '../services/paymentService';
 
 // ─── Toast Notification System ───────────────────────────────────────────────
