@@ -239,7 +239,7 @@ const BookingFlow: React.FC = () => {
         first_name: customerInfo.name,
         last_name: 'customer',
         email: 'customer@email.com',
-        callback_url: 'https://kfades.onrender.com/paychangu/callback',
+        callback_url: 'https://kfades.vercel.app/appointment',
         return_url: 'https://kfades.vercel.app/checkout',
       };
 
