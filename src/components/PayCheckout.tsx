@@ -141,7 +141,7 @@ const verifyWithBackend = async (tx_ref: string) => {
     // Wait 3 seconds before verifying — gives Paychangu time to update
     // the payment state after a cancellation. Without this, a cancelled
     // payment can still return 'success' from the verify endpoint.
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 7000));
 
     const res = await fetch(
       `https://kfades.onrender.com/paychangu/verify-payment/${encodeURIComponent(tx_ref)}`
