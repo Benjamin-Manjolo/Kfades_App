@@ -240,7 +240,7 @@ const BookingFlow: React.FC = () => {
         last_name: 'customer',
         email: 'customer@email.com',
         callback_url:  'https://kfades.vercel.app/checkout',
-        return_url: 'https://kfades.vercel.app/checkout',
+        return_url: `https://kfades.vercel.app/checkout?tx_ref=${txRef}`,
       };
 
       const response = await paymentService.initiateTransaction(paymentData);

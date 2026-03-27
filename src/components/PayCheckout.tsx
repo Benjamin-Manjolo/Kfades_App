@@ -84,11 +84,10 @@ const VerifyingState: React.FC = () => (
     </div>
     <div className="text-center space-y-1">
       <p className="text-sm font-semibold text-black tracking-wide">Verifying payment</p>
-      <p className="text-xs text-gray-400">Checking with our payment server…</p>
+      <p className="text-xs text-gray-400">Please wait, this may take a moment…</p>
     </div>
   </div>
 );
-
 // ─── Booking detail row ───────────────────────────────────────────────────────
 
 const DetailRow: React.FC<{ label: string; value: string }> = ({ label, value }) => (
@@ -137,39 +136,37 @@ const PayCheckout: React.FC = () => {
     // Always verify server-side regardless of URL param
     verifyWithBackend(tx_ref);
   }, []);
+const verifyWithBackend = async (tx_ref: string) => {
+  try {
+    // Wait 3 seconds before verifying — gives Paychangu time to update
+    // the payment state after a cancellation. Without this, a cancelled
+    // payment can still return 'success' from the verify endpoint.
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
-  const verifyWithBackend = async (tx_ref: string) => {
-    try {
-      const res = await fetch(
-        `https://kfades.onrender.com/paychangu/verify-payment/${encodeURIComponent(tx_ref)}`
-      );
-      const json = await res.json();
+    const res = await fetch(
+      `https://kfades.onrender.com/paychangu/verify-payment/${encodeURIComponent(tx_ref)}`
+    );
+    const json = await res.json();
 
-      // Paychangu verify response: json.data.status === "success"
-      const verified =
-        json?.data?.status === 'success' ||
-        json?.data?.data?.status === 'success';
+    const paymentStatus = json?.data?.status ?? json?.data?.data?.status;
 
-      if (verified) {
-        updateLocalBookingStatus(tx_ref, 'confirmed');
-        setStatus('success');
-      } else {
-        updateLocalBookingStatus(tx_ref, 'failed');
-        setStatus('failed');
-      }
-    } catch {
-      // Network error — fall back to URL param optimistically
-      const params = new URLSearchParams(window.location.search);
-      const urlStatus = params.get('status');
-      if (urlStatus === 'successful') {
-        updateLocalBookingStatus(tx_ref, 'confirmed');
-        setStatus('success');
-      } else {
-        updateLocalBookingStatus(tx_ref, 'failed');
-        setStatus('failed');
-      }
+    // Also check amount > 0 — cancelled payments sometimes return success
+    // but with amount = 0
+    const paidAmount = Number(json?.data?.amount ?? json?.data?.data?.amount ?? 0);
+    const verified = paymentStatus === 'success' && paidAmount > 0;
+
+    if (verified) {
+      updateLocalBookingStatus(tx_ref, 'confirmed');
+      setStatus('success');
+    } else {
+      updateLocalBookingStatus(tx_ref, 'failed');
+      setStatus('failed');
     }
-  };
+  } catch {
+    updateLocalBookingStatus(tx_ref, 'failed');
+    setStatus('failed');
+  }
+};
 
   return (
     <>
